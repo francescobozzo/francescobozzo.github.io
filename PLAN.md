@@ -41,7 +41,7 @@
     │   ├── index.astro               # Homepage (brief intro + latest posts)
     │   ├── about.astro               # About me (lorem ipsum for now)
     │   ├── cv.astro                  # CV page (downloadable PDF link + summary)
-    │   ├── contact.astro             # Contact info / links
+    │   ├── (contact removed — links in footer)
     │   ├── projects.astro            # Project portfolio
     │   ├── blog/
     │   │   └── [...slug].astro       # Dynamic blog post renderer
@@ -77,10 +77,8 @@
 - Link to downloadable PDF (stored in `public/cv.pdf`)
 - Key skills / experience timeline
 
-### Contact (`/contact`)
-- Email link
-- Social links (GitHub, LinkedIn, etc.)
-- No form (keep it lightweight, no backend)
+### Contact
+- Removed page. GitHub / LinkedIn links in footer instead.
 
 ### Projects (`/projects`)
 - Grid/list of project cards
@@ -209,7 +207,7 @@ Progress tracked in [WORKLOG.md](./WORKLOG.md). Each step = one commit.
 
 1. **Scaffold** — flake.nix, .envrc, package.json, tsconfig, astro.config.mjs
 2. **Base layout** — BaseLayout.astro, Header, Footer, ThemeToggle, global.css
-3. **Pages** — index, about, cv, contact, projects (+ projects collection)
+3. **Pages** — index, about, cv, projects (+ projects collection)
 4. **Blog system** — content.config.ts, blog/[...slug].astro, blog.astro, PostCard
 5. **RSS feed** — rss.xml.js + auto-discovery link
 6. **Math support** — katex, remark-math, rehype-katex config + katex.css
@@ -240,6 +238,6 @@ Progress tracked in [WORKLOG.md](./WORKLOG.md). Each step = one commit.
 - **Table of contents** auto-generated from headings in blog posts
 - **Related posts** based on shared tags
 - **OG images** auto-generated per post for social sharing
-- **Newsletter signup** (e.g., Buttondown/Substack embed on contact page)
+- **Newsletter signup** (e.g., Buttondown/Substack embed)
 - **Latex in sidenotes** — math equations as sidenotes would be very Tufte-esque
 - **Progress bar** at top of blog posts (scroll percentage)
