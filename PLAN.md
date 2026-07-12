@@ -203,20 +203,20 @@ npm run preview # → serve dist/ locally
 git push origin main   # triggers GitHub Actions → deploys to GitHub Pages
 ```
 
-## Implementation Steps (one commit each)
+## Implementation Steps
 
-| # | Commit | Files |
-|---|--------|-------|
-| 1 | **Scaffold**: flake.nix, .envrc, package.json, tsconfig, astro.config.mjs | Nix + project config |
-| 2 | **Base layout**: BaseLayout.astro, Header, Footer, ThemeToggle, global.css | Shell + dark mode |
-| 3 | **Pages**: index, about, cv, contact, projects | Static pages + projects collection |
-| 4 | **Blog system**: content.config.ts, blog/[...slug].astro, blog.astro, PostCard | Content collection + rendering |
-| 5 | **RSS feed**: rss.xml.js + auto-discovery link | RSS |
-| 6 | **Math support**: katex, remark-math, rehype-katex config + katex.css | LaTeX rendering |
-| 7 | **Tags + Search**: tag listing page, client-side search component | Blog features |
-| 8 | **Styling + Mobile**: tufte.css, code blocks, responsive nav, fluid typography | Visual polish + mobile |
-| 9 | **GitHub Pages**: deploy.yml workflow + site config | CI/CD |
-| 10 | **Docs**: README.md, AGENTS.md, example blog post | Documentation |
+Progress tracked in [WORKLOG.md](./WORKLOG.md). Each step = one commit.
+
+1. **Scaffold** — flake.nix, .envrc, package.json, tsconfig, astro.config.mjs
+2. **Base layout** — BaseLayout.astro, Header, Footer, ThemeToggle, global.css
+3. **Pages** — index, about, cv, contact, projects (+ projects collection)
+4. **Blog system** — content.config.ts, blog/[...slug].astro, blog.astro, PostCard
+5. **RSS feed** — rss.xml.js + auto-discovery link
+6. **Math support** — katex, remark-math, rehype-katex config + katex.css
+7. **Tags + Search** — tag listing page, client-side search component
+8. **Styling + Mobile** — tufte.css, code blocks, responsive nav, fluid typography
+9. **GitHub Pages** — deploy.yml workflow + site config
+10. **Docs** — README.md, AGENTS.md, example blog post
 
 ## Decisions
 

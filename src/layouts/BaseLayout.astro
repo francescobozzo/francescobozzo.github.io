@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/katex.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { ClientRouter } from 'astro:transitions';
@@ -15,6 +16,15 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Set theme before CSS loads — prevents flash -->
+    <script is:inline>
+      (function(){
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
@@ -32,12 +42,35 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
       href="/rss.xml"
     />
 
-    <!-- Client-side navigation -->
-    <ClientRouter />
+    <!-- Client-side navigation (instant page swaps, no animation to prevent flash) -->
+    <ClientRouter transition="none" />
 
     <slot name="head" />
   </head>
   <body>
+    <script is:inline>
+      (function(){
+        history.scrollRestoration='manual';
+        var p=location.pathname;
+        function k(){return '__s:'+p}
+        // Save on navigation + unload
+        window.addEventListener('beforeunload',function(){sessionStorage.setItem(k(),window.scrollY)});
+        document.addEventListener('astro:before-preparation',function(){sessionStorage.setItem(k(),window.scrollY)});
+        // Restore after ClientRouter swap
+        document.addEventListener('astro:after-swap',function(){
+          p=location.pathname;
+          var y=sessionStorage.getItem(k());
+          if(y!=null)requestAnimationFrame(function(){window.scrollTo(0,+y)});
+        });
+        // Restore on initial load
+        if(document.readyState==='loading'){
+          document.addEventListener('DOMContentLoaded',function(){
+            var y=sessionStorage.getItem(k());
+            if(y!=null)window.scrollTo(0,+y);
+          });
+        }
+      })();
+    </script>
     <div class="page-wrapper">
       <Header currentPath={Astro.url.pathname} />
       <main class="content">

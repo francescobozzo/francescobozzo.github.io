@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const featured = allProjects.filter((p) => p.data.featured);
+const others = allProjects.filter((p) => !p.data.featured);
+---
+
+<BaseLayout title="Projects — Francesco Bozzo" description="Projects by Francesco Bozzo">
+  <h1>Projects</h1>
+
+  {featured.length > 0 && (
+    <section>
+      <h2>Featured</h2>
+      <div class="project-grid">
+        {featured.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {others.length > 0 && (
+    <section>
+      <h2>Other Projects</h2>
+      <div class="project-grid">
+        {others.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {allProjects.length === 0 && (
+    <p class="empty-state">No projects yet. Coming soon!</p>
+  )}
+</BaseLayout>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
+    gap: 1rem;
+  }
+
+  .empty-state {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  section {
+    margin-top: 2rem;
+  }
+</style>

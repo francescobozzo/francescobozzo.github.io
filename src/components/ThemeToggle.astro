@@ -59,32 +59,49 @@
   .icon-sun,
   .icon-moon {
     position: absolute;
-    transition: opacity var(--transition-fast);
   }
 
-  /* Show sun in dark mode, moon in light mode */
-  [data-theme='light'] .icon-sun { display: none; }
-  [data-theme='dark'] .icon-moon { display: none; }
+  .icon-sun.hidden,
+  .icon-moon.hidden {
+    display: none;
+  }
 </style>
 
 <script is:inline>
   function getTheme() {
-    const stored = localStorage.getItem('theme');
-    if (stored) return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var t = localStorage.getItem('theme');
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return t;
+  }
+
+  function updateIcons(theme) {
+    var toggle = document.querySelector('.theme-toggle');
+    if (!toggle) return;
+    var sun = toggle.querySelector('.icon-sun');
+    var moon = toggle.querySelector('.icon-moon');
+    if (theme === 'dark') {
+      sun?.classList.remove('hidden');
+      moon?.classList.add('hidden');
+    } else {
+      sun?.classList.add('hidden');
+      moon?.classList.remove('hidden');
+    }
   }
 
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    updateIcons(theme);
   }
 
-  // Initial apply (before paint)
-  applyTheme(getTheme());
+  // Sync icons on load (theme already applied by BaseLayout head script)
+  updateIcons(getTheme());
 
-  // Toggle button
-  document.querySelector('.theme-toggle')?.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
+  // Event delegation — survives ClientRouter swaps
+  document.addEventListener('click', (e) => {
+    var toggle = e.target.closest('.theme-toggle');
+    if (!toggle) return;
+    var current = document.documentElement.getAttribute('data-theme');
     applyTheme(current === 'dark' ? 'light' : 'dark');
   });
 
@@ -95,7 +112,7 @@
     }
   });
 
-  // Preserve theme across ClientRouter navigations
+  // Preserve theme + icons across ClientRouter navigations
   document.addEventListener('astro:after-swap', () => {
     applyTheme(getTheme());
   });

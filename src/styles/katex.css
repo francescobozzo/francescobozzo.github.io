@@ -1,0 +1,34 @@
+/* KaTeX base — loaded via layout */
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
+
+/* KaTeX dark mode adjustments */
+[data-theme='dark'] {
+  --katex-color: var(--color-text);
+}
+
+/* Ensure KaTeX respects theme colors */
+[data-theme='dark'] .katex {
+  color: var(--color-text);
+}
+
+[data-theme='dark'] .katex .mord,
+[data-theme='dark'] .katex .mbin,
+[data-theme='dark'] .katex .mrel,
+[data-theme='dark'] .katex .mop,
+[data-theme='dark'] .katex .mopen,
+[data-theme='dark'] .katex .mclose,
+[data-theme='dark'] .katex .mpunct,
+[data-theme='dark'] .katex .minner {
+  color: var(--color-text);
+}
+
+/* Display math centering */
+.display.math {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Verify KaTeX stylesheet loaded */
+.katex-version { display: none; }
+.katex-version::after { content: "0.10.2 or earlier"; }

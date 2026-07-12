@@ -1,0 +1,115 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, demoUrl, repoUrl } = project.data;
+---
+
+<article class="project-card">
+  <h3 class="project-title">
+    {demoUrl
+      ? <a href={demoUrl} target="_blank" rel="noopener">{title}</a>
+      : title}
+  </h3>
+  <p class="project-description">{description}</p>
+  <div class="project-meta">
+    {tags.length > 0 && (
+      <div class="project-tags">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+    <div class="project-links">
+      {repoUrl && (
+        <a href={repoUrl} target="_blank" rel="noopener" aria-label="Repository">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path><line x1="8" y1="9" x2="16" y2="9"></line></svg>
+        </a>
+      )}
+      {demoUrl && (
+        <a href={demoUrl} target="_blank" rel="noopener" aria-label="Live demo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    padding: 1.25rem;
+    border: 1px solid var(--color-card-border);
+    border-radius: 8px;
+    background: var(--color-card-bg);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-card-hover-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .project-title {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.4em;
+  }
+
+  .project-title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .project-title a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .project-description {
+    font-size: 0.925rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.75em;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.15em 0.5em;
+    border-radius: 999px;
+    background: var(--color-tag-bg);
+    color: var(--color-tag-text);
+  }
+
+  .project-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .project-links a {
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .project-links a:hover {
+    color: var(--color-accent);
+  }
+</style>

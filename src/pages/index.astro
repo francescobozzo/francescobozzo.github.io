@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title="Francesco Bozzo" description="Personal website of Francesco Bozzo">
+  <section class="hero">
+    <h1>Francesco Bozzo</h1>
+    <p class="tagline">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua.
+    </p>
+    <nav class="hero-links">
+      <a href="/about">About</a>
+      <span class="sep">&middot;</span>
+      <a href="/blog">Blog</a>
+      <span class="sep">&middot;</span>
+      <a href="/projects">Projects</a>
+      <span class="sep">&middot;</span>
+      <a href="/cv">CV</a>
+      <span class="sep">&middot;</span>
+      <a href="/contact">Contact</a>
+    </nav>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="latest-posts">
+      <h2>Latest Posts</h2>
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <a href={`/blog/${post.id}`}>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+              <span class="post-title">{post.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/blog" class="view-all">View all posts &rarr;</a>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    margin-bottom: 3rem;
+  }
+
+  .hero h1 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+  }
+
+  .tagline {
+    font-size: 1.1em;
+    color: var(--color-text-secondary);
+    max-width: 50ch;
+    margin-bottom: 1.5em;
+  }
+
+  .hero-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+  }
+
+  .hero-links a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero-links a:hover {
+    text-decoration: underline;
+  }
+
+  .sep {
+    color: var(--color-text-muted);
+  }
+
+  .latest-posts {
+    margin-top: 2rem;
+  }
+
+  .latest-posts h2 {
+    font-size: 1.3rem;
+    margin-top: 0;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-item {
+    margin-bottom: 0.5em;
+  }
+
+  .post-item a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75em;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .post-item a:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .post-item time {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    font-weight: 500;
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 0.75em;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -20,6 +20,18 @@ const navLinks = [
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="site-title">francescobozzo</a>
+
+    <button
+      class="nav-toggle"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      type="button"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
     <nav class="nav-links">
       {navLinks.map((link) => (
         <a
@@ -29,8 +41,8 @@ const navLinks = [
           {link.label}
         </a>
       ))}
+      <ThemeToggle />
     </nav>
-    <ThemeToggle />
   </div>
 </header>
 
@@ -55,7 +67,7 @@ const navLinks = [
     height: 100%;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .site-title {
@@ -66,11 +78,53 @@ const navLinks = [
     text-decoration: none;
     letter-spacing: -0.02em;
     white-space: nowrap;
+    transition: color var(--transition-fast);
   }
 
   .site-title:hover {
     color: var(--color-accent);
     text-decoration: none;
+  }
+
+  /* Hamburger — hidden on desktop */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    gap: 5px;
+    padding: 0;
+  }
+
+  .nav-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  /* Hamburger active state */
+  .nav-toggle[aria-expanded='true'] .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded='true'] .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle[aria-expanded='true'] .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
 
   .nav-links {
@@ -101,29 +155,87 @@ const navLinks = [
     color: var(--color-accent);
   }
 
-  /* Mobile: stack nav */
+  /* Mobile: hamburger nav */
   @media (max-width: 640px) {
-    .header-inner {
-      gap: 0.75rem;
+    .nav-toggle {
+      display: flex;
+      margin-left: auto;
     }
 
     .nav-links {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1rem var(--page-padding);
       gap: 0;
+      background: var(--color-header-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--color-border);
+      transform: translateX(100%);
+      transition: transform var(--transition-normal);
+      overflow-y: auto;
+      z-index: 99;
+    }
+
+    .nav-links.open {
+      transform: translateX(0);
     }
 
     .nav-link {
-      font-size: 0.8rem;
-      padding: 0.3em 0.4em;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .site-title {
       font-size: 1rem;
+      padding: 0.75em 0.5em;
+      border-radius: 0;
+      border-bottom: 1px solid var(--color-border);
     }
 
-    .nav-link {
-      font-size: 0.75rem;
+    /* Theme toggle in mobile nav */
+    .nav-links > :last-child {
+      margin-top: auto;
+      align-self: center;
+      padding: 1rem 0;
+      border-bottom: none;
     }
   }
 </style>
+
+<script is:inline>
+  // Mobile nav toggle
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.nav-links');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    nav?.classList.toggle('open');
+  });
+
+  // Close nav on link click
+  nav?.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      nav?.classList.remove('open');
+    });
+  });
+
+  // Close on escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav?.classList.contains('open')) {
+      toggle?.setAttribute('aria-expanded', 'false');
+      nav?.classList.remove('open');
+      toggle?.focus();
+    }
+  });
+
+  // Close on astro:after-swap (ClientRouter navigation)
+  document.addEventListener('astro:after-swap', () => {
+    const nav = document.querySelector('.nav-links');
+    const toggle = document.querySelector('.nav-toggle');
+    toggle?.setAttribute('aria-expanded', 'false');
+    nav?.classList.remove('open');
+  });
+</script>

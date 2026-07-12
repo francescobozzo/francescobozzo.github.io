@@ -30,13 +30,13 @@
   --font-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
 
   /* Sizes */
-  --content-max: 65ch;
+  --content-max: 75ch;
   --page-padding: 2rem;
   --header-height: 3.5rem;
 
   /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
+  --transition-fast: 50ms ease;
+  --transition-normal: 80ms ease;
 
   /* Code blocks (Shiki) */
   --astro-code-font-family: var(--font-mono);
@@ -78,8 +78,11 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  background-color: #fff;
+}
+[data-theme='dark'] html {
+  background-color: #0d1117;
 }
 
 body {
@@ -91,7 +94,7 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  transition: color var(--transition-normal), background-color var(--transition-normal);
+  transition: color 0.2s ease, background-color 0.2s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -110,7 +113,19 @@ body {
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--page-padding);
+  padding: calc(var(--header-height) + var(--page-padding)) var(--page-padding) var(--page-padding);
+}
+
+/* Smooth theme transitions on all colored elements */
+.site-header,
+.site-footer,
+.nav-links,
+.tag,
+.cv-entry,
+.project-card,
+.search-input,
+.theme-toggle {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* ============================================
@@ -173,47 +188,45 @@ em {
    Code blocks (Shiki)
    ============================================ */
 .astro-code {
-  border: 1px solid var(--color-code-border) !important;
   border-radius: 6px !important;
   margin: 1.5em 0 !important;
-  font-size: 0.875em !important;
+  font-size: 0.85em !important;
+  padding: 1em 1.25em !important;
+  transition: background-color 0.2s ease;
+  counter-reset: code-line;
 }
 
-.astro-code-footer {
-  border-top: 1px solid var(--color-code-border) !important;
+.astro-code code {
+  display: block;
 }
 
-/* Dark mode Shiki swap */
-@media (prefers-color-scheme: dark) {
-  .astro-code,
-  .astro-code span {
-    color: var(--astro-code-dark) !important;
-    background-color: var(--astro-code-dark-bg) !important;
-    font-style: var(--astro-code-dark-font-style) !important;
-    font-weight: var(--astro-code-dark-font-weight) !important;
-    text-decoration: var(--astro-code-dark-text-decoration) !important;
-  }
+.astro-code .line {
+  counter-increment: code-line;
+  position: relative;
+  padding-left: 5ch !important;
 }
 
-[data-theme='light'] {
-  .astro-code,
-  .astro-code span {
-    color: var(--astro-code-light) !important;
-    background-color: var(--astro-code-light-bg) !important;
-    font-style: var(--astro-code-light-font-style) !important;
-    font-weight: var(--astro-code-light-font-weight) !important;
-    text-decoration: var(--astro-code-light-text-decoration) !important;
-  }
+.astro-code .line::before {
+  content: counter(code-line);
+  position: absolute;
+  left: 0;
+  width: 2ch;
+  text-align: right;
+  color: var(--color-text-muted);
+  opacity: 0.35;
+  font-family: var(--font-mono);
+  pointer-events: none;
 }
 
+/* Shiki dual-theme: light is inline default, swap to dark via CSS vars */
 [data-theme='dark'] {
   .astro-code,
   .astro-code span {
-    color: var(--astro-code-dark) !important;
-    background-color: var(--astro-code-dark-bg) !important;
-    font-style: var(--astro-code-dark-font-style) !important;
-    font-weight: var(--astro-code-dark-font-weight) !important;
-    text-decoration: var(--astro-code-dark-text-decoration) !important;
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
   }
 }
 
@@ -308,5 +321,46 @@ th {
   }
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ============================================
+   Mobile
+   ============================================ */
+@media (max-width: 640px) {
+  :root {
+    --page-padding: 1.25rem;
+  }
+
+  /* Code blocks scroll horizontally */
+  .astro-code {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin-left: calc(var(--page-padding) * -1) !important;
+    margin-right: calc(var(--page-padding) * -1) !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  /* Tables scroll horizontally */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table > * {
+    display: block;
+  }
+
+  /* Tighten spacing */
+  h1, h2, h3 {
+    margin-top: 1.5em;
+  }
+
+  /* Blockquote less indent */
+  blockquote {
+    padding-left: 0.75em;
   }
 }

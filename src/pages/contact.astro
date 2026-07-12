@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface LinkItem {
+  label: string;
+  href: string;
+  icon: string;
+}
+
+const links: LinkItem[] = [
+  { label: 'Email', href: 'mailto:you@example.com', icon: 'mail' },
+  { label: 'GitHub', href: 'https://github.com/francescobozzo', icon: 'github' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/francesco-bozzo-fb/', icon: 'linkedin' },
+];
+---
+
+<BaseLayout title="Contact — Francesco Bozzo" description="Get in touch with Francesco Bozzo">
+  <h1>Contact</h1>
+
+  <p>Feel free to reach out through any of the channels below.</p>
+
+  <ul class="contact-list">
+    {links.map((link) => (
+      <li class="contact-item">
+        <a href={link.href} target="_blank" rel="noopener">
+          <span class="contact-label">{link.label}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
+
+<style>
+  .contact-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .contact-item {
+    margin-bottom: 0.5em;
+  }
+
+  .contact-item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    padding: 0.4em 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-fast);
+  }
+
+  .contact-item a:hover {
+    border-bottom-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .contact-label {
+    font-weight: 500;
+  }
+</style>
