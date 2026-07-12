@@ -18,7 +18,7 @@
   --color-card-bg: #ffffff;
   --color-card-border: #d0d7de;
   --color-card-hover-border: #0969da;
-  --color-header-bg: rgba(255, 255, 255, 0.85);
+  --color-header-bg: #ffffff;
   --color-tag-bg: #f0f4f8;
   --color-tag-text: #0969da;
   --color-toggle-bg: #e1e4e8;
@@ -59,7 +59,7 @@
   --color-card-bg: #161b22;
   --color-card-border: #30363d;
   --color-card-hover-border: #58a6ff;
-  --color-header-bg: rgba(13, 17, 23, 0.85);
+  --color-header-bg: #0d1117;
   --color-tag-bg: #1c3144;
   --color-tag-text: #58a6ff;
   --color-toggle-bg: #30363d;
@@ -79,10 +79,9 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  background-color: #fff;
-}
-[data-theme='dark'] html {
-  background-color: #0d1117;
+  background-color: var(--color-bg);
+  min-height: 100dvh;
+  transition: background-color 0.2s ease;
 }
 
 body {
@@ -90,11 +89,11 @@ body {
   font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   line-height: 1.7;
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background: transparent;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  transition: color 0.2s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -126,6 +125,24 @@ body {
 .search-input,
 .theme-toggle {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Site header background — hardcoded colors bypass CSS variable resolution delay */
+.site-header {
+  background: #ffffff;
+}
+[data-theme='dark'] .site-header {
+  background: #0d1117;
+}
+
+/* Mobile nav panel background — only when fixed/fullscreen */
+@media (max-width: 640px) {
+  .nav-links {
+    background: #ffffff;
+  }
+  [data-theme='dark'] .nav-links {
+    background: #0d1117;
+  }
 }
 
 /* ============================================
@@ -218,16 +235,23 @@ em {
   pointer-events: none;
 }
 
-/* Shiki dual-theme: light is inline default, swap to dark via CSS vars */
-[data-theme='dark'] {
-  .astro-code,
-  .astro-code span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-  }
+/* Shiki: bg hardcoded (flash fix), span colors use CSS vars for syntax highlighting */
+.astro-code {
+  background-color: #f6f8fa;
+  color: var(--shiki-light);
+}
+.astro-code span {
+  color: var(--shiki-light);
+}
+[data-theme='dark'] .astro-code {
+  background-color: #24292e;
+  color: var(--shiki-dark);
+}
+[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
 }
 
 /* ============================================

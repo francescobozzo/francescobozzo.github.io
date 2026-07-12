@@ -16,6 +16,8 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
+      // No inline default styles — CSS handles both themes via --shiki-* vars
+      defaultColor: false,
     },
   },
 });

@@ -48,27 +48,61 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
     <slot name="head" />
   </head>
   <body>
-    <script is:inline>
+        <script is:inline>
       (function(){
+        // Disable browser's built-in scroll restoration
         history.scrollRestoration='manual';
+
         var p=location.pathname;
         function k(){return '__s:'+p}
-        // Save on navigation + unload
-        window.addEventListener('beforeunload',function(){sessionStorage.setItem(k(),window.scrollY)});
-        document.addEventListener('astro:before-preparation',function(){sessionStorage.setItem(k(),window.scrollY)});
-        // Restore after ClientRouter swap
+
+        // Debounced scroll saver — captures final position even during momentum
+        var scrollTimer;
+        function saveScroll(){
+          var y=window.scrollY;
+          sessionStorage.setItem(k(), y);
+        }
+        window.addEventListener('scroll',function(){
+          clearTimeout(scrollTimer);
+          scrollTimer=setTimeout(saveScroll,100);
+        },{passive:true});
+
+        // Save on navigation start (catches position before momentum settles)
+        document.addEventListener('astro:before-preparation',function(){
+          saveScroll();
+        });
+
+        // Save on unload
+        window.addEventListener('beforeunload',function(){saveScroll()});
+
+        // Set inline bg colors BEFORE swap — modifies new document before it enters DOM
+        document.addEventListener('astro:before-swap',function(e){
+          var t=localStorage.getItem('theme');
+          var isDark=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var codeBg=isDark?'#24292e':'#f6f8fa';
+          var headerBg=isDark?'#0d1117':'#ffffff';
+          var newDoc=e.newDocument;
+          newDoc.querySelectorAll('.astro-code').forEach(function(el){
+            el.style.backgroundColor=codeBg;
+          });
+          var h=newDoc.querySelector('.site-header');
+          if(h)h.style.backgroundColor=headerBg;
+        });
+        // Clear inline bg styles after page fully loaded — lets CSS handle theme toggles
+        document.addEventListener('astro:page-load',function(){
+          document.querySelectorAll('.astro-code').forEach(function(el){
+            el.style.backgroundColor='';
+          });
+          var h=document.querySelector('.site-header');
+          if(h)h.style.backgroundColor='';
+        });
+        // Restore scroll after swap
         document.addEventListener('astro:after-swap',function(){
           p=location.pathname;
           var y=sessionStorage.getItem(k());
-          if(y!=null)requestAnimationFrame(function(){window.scrollTo(0,+y)});
+          if(y!=null) window.scrollTo({top:+y,behavior:'instant'});
         });
-        // Restore on initial load
-        if(document.readyState==='loading'){
-          document.addEventListener('DOMContentLoaded',function(){
-            var y=sessionStorage.getItem(k());
-            if(y!=null)window.scrollTo(0,+y);
-          });
-        }
+
       })();
     </script>
     <div class="page-wrapper">
@@ -78,5 +112,10 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
       </main>
       <Footer />
     </div>
+    <!-- Scroll restoration at end of body — DOM parsed, browser hasn't painted yet -->
+    <script is:inline>
+      var _y=sessionStorage.getItem('__s:'+location.pathname);
+      if(_y!=null)window.scrollTo({top:+_y,behavior:'instant'});
+    </script>
   </body>
 </html>

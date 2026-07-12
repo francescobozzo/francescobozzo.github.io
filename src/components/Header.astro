@@ -13,7 +13,6 @@ const navLinks = [
   { href: '/blog', label: 'Blog' },
   { href: '/projects', label: 'Projects' },
   { href: '/cv', label: 'CV' },
-  { href: '/contact', label: 'Contact' },
 ];
 ---
 
@@ -32,6 +31,7 @@ const navLinks = [
       <span class="hamburger-line"></span>
     </button>
 
+    <ThemeToggle />
     <nav class="nav-links">
       {navLinks.map((link) => (
         <a
@@ -41,7 +41,6 @@ const navLinks = [
           {link.label}
         </a>
       ))}
-      <ThemeToggle />
     </nav>
   </div>
 </header>
@@ -53,11 +52,8 @@ const navLinks = [
     z-index: 100;
     width: 100%;
     height: var(--header-height);
-    background: var(--color-header-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
-    transition: background var(--transition-normal), border-color var(--transition-normal);
+    transition: border-color var(--transition-normal);
   }
 
   .header-inner {
@@ -162,6 +158,10 @@ const navLinks = [
       margin-left: auto;
     }
 
+    .header-inner {
+      gap: 0.5rem;
+    }
+
     .nav-links {
       position: fixed;
       top: var(--header-height);
@@ -170,72 +170,64 @@ const navLinks = [
       bottom: 0;
       flex-direction: column;
       align-items: stretch;
-      padding: 1rem var(--page-padding);
+      padding: 0.5rem var(--page-padding);
       gap: 0;
-      background: var(--color-header-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid var(--color-border);
-      transform: translateX(100%);
-      transition: transform var(--transition-normal);
       overflow-y: auto;
       z-index: 99;
+      visibility: hidden;
+      opacity: 0;
     }
 
     .nav-links.open {
-      transform: translateX(0);
+      visibility: visible;
+      opacity: 1;
     }
 
     .nav-link {
-      font-size: 1rem;
-      padding: 0.75em 0.5em;
+      font-size: 0.95rem;
+      padding: 0.5em 0.5em;
       border-radius: 0;
       border-bottom: 1px solid var(--color-border);
     }
 
-    /* Theme toggle in mobile nav */
-    .nav-links > :last-child {
-      margin-top: auto;
-      align-self: center;
-      padding: 1rem 0;
-      border-bottom: none;
-    }
+
   }
 </style>
 
 <script is:inline>
-  // Mobile nav toggle
-  const toggle = document.querySelector('.nav-toggle');
-  const nav = document.querySelector('.nav-links');
-
-  toggle?.addEventListener('click', () => {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+  // Mobile nav toggle — event delegation survives ClientRouter swaps
+  document.addEventListener('click', (e) => {
+    var toggle = e.target.closest('.nav-toggle');
+    if (!toggle) return;
+    var nav = document.querySelector('.nav-links');
+    var isOpen = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!isOpen));
     nav?.classList.toggle('open');
-  });
-
-  // Close nav on link click
-  nav?.querySelectorAll('.nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
-      toggle?.setAttribute('aria-expanded', 'false');
-      nav?.classList.remove('open');
-    });
+    // Lock scroll on html when nav open
+    document.documentElement.style.overflow = isOpen ? '' : 'hidden';
   });
 
   // Close on escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav?.classList.contains('open')) {
-      toggle?.setAttribute('aria-expanded', 'false');
-      nav?.classList.remove('open');
-      toggle?.focus();
+    if (e.key === 'Escape') {
+      var nav = document.querySelector('.nav-links');
+      if (nav?.classList.contains('open')) {
+        var toggle = document.querySelector('.nav-toggle');
+        toggle?.setAttribute('aria-expanded', 'false');
+        nav?.classList.remove('open');
+        toggle?.focus();
+        document.documentElement.style.overflow = '';
+      }
     }
   });
 
-  // Close on astro:after-swap (ClientRouter navigation)
+  // Close on ClientRouter navigation — menu stays open during swap, hiding old page
   document.addEventListener('astro:after-swap', () => {
-    const nav = document.querySelector('.nav-links');
-    const toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.nav-links');
+    var toggle = document.querySelector('.nav-toggle');
     toggle?.setAttribute('aria-expanded', 'false');
     nav?.classList.remove('open');
+    document.documentElement.style.overflow = '';
   });
 </script>
