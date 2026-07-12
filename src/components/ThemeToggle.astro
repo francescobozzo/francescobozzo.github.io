@@ -1,0 +1,102 @@
+---
+/**
+ * Dark/Light mode toggle.
+ * - Reads localStorage.theme on init
+ * - Falls back to prefers-color-scheme
+ * - Persists choice to localStorage
+ * - Listens to astro:after-swap for ClientRouter navigation
+ */
+---
+
+<button
+  class="theme-toggle"
+  aria-label="Toggle dark mode"
+  type="button"
+>
+  <!-- Sun icon -->
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+  <!-- Moon icon -->
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-toggle-bg);
+    color: var(--color-toggle-icon);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    padding: 0;
+  }
+
+  .theme-toggle:hover {
+    background: var(--color-border);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .icon-sun,
+  .icon-moon {
+    position: absolute;
+    transition: opacity var(--transition-fast);
+  }
+
+  /* Show sun in dark mode, moon in light mode */
+  [data-theme='light'] .icon-sun { display: none; }
+  [data-theme='dark'] .icon-moon { display: none; }
+</style>
+
+<script is:inline>
+  function getTheme() {
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  // Initial apply (before paint)
+  applyTheme(getTheme());
+
+  // Toggle button
+  document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // System preference change
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+
+  // Preserve theme across ClientRouter navigations
+  document.addEventListener('astro:after-swap', () => {
+    applyTheme(getTheme());
+  });
+</script>

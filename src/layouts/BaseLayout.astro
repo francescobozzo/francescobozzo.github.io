@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Personal website of Francesco Bozzo' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Francesco Bozzo" />
+
+    <title>{title}</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- RSS auto-discovery -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Francesco Bozzo — Blog RSS"
+      href="/rss.xml"
+    />
+
+    <!-- Client-side navigation -->
+    <ClientRouter />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <Header currentPath={Astro.url.pathname} />
+      <main class="content">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>
