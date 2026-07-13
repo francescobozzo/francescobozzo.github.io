@@ -4,7 +4,12 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <span class="footer-copy">&copy; {year} Francesco Bozzo</span>
+    <span class="footer-copy">&copy; {year} Francesco Bozzo
+      <span class="sep">&middot;</span>
+      <a href="/rss.xml" class="rss-icon" title="RSS Feed" aria-label="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </span>
     <div class="footer-links">
       <a href="https://github.com/francescobozzo" target="_blank" rel="noopener">GitHub</a>
       <span class="sep">&middot;</span>
@@ -37,6 +42,20 @@ const year = new Date().getFullYear();
     color: var(--color-text-muted);
   }
 
+  .rss-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.3em;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    vertical-align: sub;
+    transition: color var(--transition-fast);
+  }
+
+  .rss-icon:hover {
+    color: var(--color-accent);
+  }
+
   .footer-links {
     display: flex;
     align-items: center;
@@ -56,7 +75,12 @@ const year = new Date().getFullYear();
     text-decoration: underline;
   }
 
-  .sep {
+  .footer-copy .sep {
+    padding: 0 0.05em 0 0.35em;
+    color: var(--color-text-muted);
+  }
+
+  .footer-links .sep {
     color: var(--color-text-muted);
   }
 </style>
