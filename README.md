@@ -25,10 +25,7 @@ Personal website built with [Astro](https://astro.build).
 # First time: allow direnv to use flake
 direnv allow
 
-# Or manually enter nix shell
-nix develop
-
-# Install dependencies (inside nix shell)
+# Install dependencies
 npm install
 
 # Dev server with live reload
@@ -59,10 +56,11 @@ npm run dev
 │   ├── layouts/           # Page layouts
 │   ├── pages/             # Routes (file-based routing)
 │   │   ├── blog/          # Blog routes
-│   │   └── rss.xml.js     # RSS feed endpoint
+│   │   ├── rss.xml.js     # RSS feed endpoint
+│   │   └── search.json.ts # Search index endpoint
 │   ├── projects/          # Project entries (*.md)
 │   └── styles/            # Global CSS
-├── public/                # Static assets (favicon, CV PDF, etc.)
+├── public/                # Static assets (favicon, etc.)
 ├── astro.config.mjs       # Astro configuration
 ├── flake.nix              # Nix development environment
 └── package.json           # Dependencies
@@ -108,11 +106,6 @@ featured: true
 ---
 ```
 
-### CV
-
-1. Drop PDF at `public/cv.pdf`
-2. Edit `src/pages/cv.astro` for HTML summary
-
 ## Deployment
 
 Push to `main` — GitHub Actions builds and deploys automatically.
@@ -136,6 +129,3 @@ Site lives at: https://francescobozzo.github.io
 | Dependencies | npm + Nix flake |
 | Hosting | GitHub Pages |
 
-## License
-
-[MIT](LICENSE)

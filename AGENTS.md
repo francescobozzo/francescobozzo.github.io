@@ -8,9 +8,7 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
 
 ## Key Rules
 
-1. **Always use nix shell for commands**: `nix develop -c bash -c "command"`
-   - Never use global node/npm — always inside nix flake
-   - direnv auto-activates flake on `cd`
+1. **direnv auto-activates nix flake** on `cd`. Run commands directly (no `nix develop` needed).
 
 2. **Build before committing**: Always run `npx astro build` to verify no errors
 
@@ -58,27 +56,26 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
 
 ```bash
 # Dev server
-nix develop -c bash -c "npm run dev"
+npm run dev
 
 # Build
-nix develop -c bash -c "npm run build"
+npm run build
 
 # Preview production
-nix develop -c bash -c "npm run preview"
+npm run preview
 
 # Sync types
-nix develop -c bash -c "npm run sync"
+npm run sync
 ```
 
 ## Dependencies
 
-Managed in `package.json`. Install inside nix shell:
+Managed in `package.json`. Install directly:
 ```bash
-nix develop -c bash -c "npm install <package>"
+npm install <package>
 ```
 
 ## See Also
 
-- [PLAN.md](./PLAN.md) — Full specification and design decisions
-- [WORKLOG.md](./WORKLOG.md) — Implementation progress tracker
+- [WORKLOG.md](./WORKLOG.md) — Todo list
 - [README.md](./README.md) — User-facing documentation
