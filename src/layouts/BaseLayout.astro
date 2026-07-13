@@ -74,28 +74,6 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
 
         // Save on unload
         window.addEventListener('beforeunload',function(){saveScroll()});
-
-        // Set inline bg colors BEFORE swap — modifies new document before it enters DOM
-        document.addEventListener('astro:before-swap',function(e){
-          var t=localStorage.getItem('theme');
-          var isDark=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var codeBg=isDark?'#24292e':'#f6f8fa';
-          var headerBg=isDark?'#0d1117':'#ffffff';
-          var newDoc=e.newDocument;
-          newDoc.querySelectorAll('.astro-code').forEach(function(el){
-            el.style.backgroundColor=codeBg;
-          });
-          var h=newDoc.querySelector('.site-header');
-          if(h)h.style.backgroundColor=headerBg;
-        });
-        // Clear inline bg styles after page fully loaded — lets CSS handle theme toggles
-        document.addEventListener('astro:page-load',function(){
-          document.querySelectorAll('.astro-code').forEach(function(el){
-            el.style.backgroundColor='';
-          });
-          var h=document.querySelector('.site-header');
-          if(h)h.style.backgroundColor='';
-        });
         // Restore scroll after swap
         document.addEventListener('astro:after-swap',function(){
           p=location.pathname;

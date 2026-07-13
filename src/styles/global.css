@@ -117,13 +117,11 @@ body {
 
 /* Smooth theme transitions on all colored elements */
 .site-header,
-.site-footer,
 .nav-links,
 .tag,
 .cv-entry,
 .project-card,
-.search-input,
-.theme-toggle {
+.search-input {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
