@@ -4,11 +4,11 @@ Track of implementation progress. See [PLAN.md](./PLAN.md) for full spec.
 
 ## Completed
 
-| Commit | Message |
-|--------|---------|
+| Commit    | Message                                                               |
+| --------- | --------------------------------------------------------------------- |
 | `9c54278` | Scaffold: flake.nix, .envrc, package.json, tsconfig, astro.config.mjs |
-| `430d6fe` | Pages, blog, RSS, search, mobile responsive, deploy, docs |
-| `5f1de5b` | Fix white flash, scroll restoration, mobile nav, footer |
+| `430d6fe` | Pages, blog, RSS, search, mobile responsive, deploy, docs             |
+| `5f1de5b` | Fix white flash, scroll restoration, mobile nav, footer               |
 
 ## Remaining (v2 / nice-to-haves)
 
