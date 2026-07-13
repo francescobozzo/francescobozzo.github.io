@@ -24,6 +24,10 @@
   --color-toggle-bg: #e1e4e8;
   --color-toggle-icon: #24292f;
 
+  /* Selection */
+  --color-selection-bg: #b3d9ff;
+  --color-selection-text: #24292f;
+
   /* Typography */
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
@@ -64,6 +68,10 @@
   --color-tag-text: #58a6ff;
   --color-toggle-bg: #30363d;
   --color-toggle-icon: #c9d1d9;
+
+  /* Selection */
+  --color-selection-bg: #484f58;
+  --color-selection-text: #c9d1d9;
 }
 
 /* ============================================
@@ -326,8 +334,8 @@ th {
    Selection
    ============================================ */
 ::selection {
-  background: var(--color-accent);
-  color: #ffffff;
+  background: var(--color-selection-bg);
+  color: var(--color-selection-text);
 }
 
 /* ============================================
