@@ -90,6 +90,7 @@ html {
   background-color: var(--color-bg);
   min-height: 100dvh;
   transition: background-color 0.2s ease;
+  overflow-y: scroll; /* Firefox: reserve scrollbar space, prevent layout shift */
 }
 
 body {
