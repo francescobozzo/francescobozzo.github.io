@@ -95,6 +95,9 @@ const navLinks = [
     cursor: pointer;
     gap: 5px;
     padding: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .nav-toggle:focus-visible {
@@ -205,6 +208,19 @@ const navLinks = [
     nav?.classList.toggle('open');
     // Lock scroll on html when nav open
     document.documentElement.style.overflow = isOpen ? '' : 'hidden';
+    // Prefetch nav pages when menu opens (hidden links skip Astro's IntersectionObserver)
+    if (!isOpen) {
+      nav?.querySelectorAll('a[href]').forEach(function (link) {
+        var href = link.getAttribute('href');
+        if (href && !href.startsWith('#') && !href.startsWith('http')) {
+          var linkEl = document.createElement('link');
+          linkEl.rel = 'prefetch';
+          linkEl.href = href;
+          linkEl.as = 'document';
+          document.head.appendChild(linkEl);
+        }
+      });
+    }
   });
 
   // Close on escape
