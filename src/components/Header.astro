@@ -98,6 +98,7 @@ const navLinks = [
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   .nav-toggle:focus-visible {
@@ -111,7 +112,10 @@ const navLinks = [
     height: 2px;
     background: var(--color-text);
     border-radius: 2px;
-    transition: transform var(--transition-fast), opacity var(--transition-fast);
+    transition: transform var(--transition-fast);
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
 
   /* Hamburger active state */
@@ -120,6 +124,7 @@ const navLinks = [
   }
   .nav-toggle[aria-expanded='true'] .hamburger-line:nth-child(2) {
     opacity: 0;
+    transition: none;
   }
   .nav-toggle[aria-expanded='true'] .hamburger-line:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
@@ -198,51 +203,62 @@ const navLinks = [
 </style>
 
 <script is:inline>
-  // Mobile nav toggle — event delegation survives ClientRouter swaps
-  document.addEventListener('click', (e) => {
-    var toggle = e.target.closest('.nav-toggle');
-    if (!toggle) return;
+  (function () {
+    var toggle = document.querySelector('.nav-toggle');
     var nav = document.querySelector('.nav-links');
-    var isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!isOpen));
-    nav?.classList.toggle('open');
-    // Lock scroll on html when nav open
-    document.documentElement.style.overflow = isOpen ? '' : 'hidden';
-    // Prefetch nav pages when menu opens (hidden links skip Astro's IntersectionObserver)
-    if (!isOpen) {
-      nav?.querySelectorAll('a[href]').forEach(function (link) {
-        var href = link.getAttribute('href');
-        if (href && !href.startsWith('#') && !href.startsWith('http')) {
-          var linkEl = document.createElement('link');
-          linkEl.rel = 'prefetch';
-          linkEl.href = href;
-          linkEl.as = 'document';
-          document.head.appendChild(linkEl);
-        }
-      });
-    }
-  });
+    if (!toggle || !nav) return;
 
-  // Close on escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      var nav = document.querySelector('.nav-links');
-      if (nav?.classList.contains('open')) {
-        var toggle = document.querySelector('.nav-toggle');
-        toggle?.setAttribute('aria-expanded', 'false');
-        nav?.classList.remove('open');
-        toggle?.focus();
-        document.documentElement.style.overflow = '';
+    var toggled = false;
+    function toggleNav() {
+      if (toggled) return;
+      toggled = true;
+      setTimeout(function () { toggled = false; }, 300);
+
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      nav.classList.toggle('open');
+      document.documentElement.style.overflow = isOpen ? '' : 'hidden';
+      // Prefetch nav pages when menu opens (hidden links skip Astro's IntersectionObserver)
+      if (!isOpen) {
+        requestAnimationFrame(function () {
+          nav.querySelectorAll('a[href]').forEach(function (link) {
+            var href = link.getAttribute('href');
+            if (href && !href.startsWith('#') && !href.startsWith('http')) {
+              var linkEl = document.createElement('link');
+              linkEl.rel = 'prefetch';
+              linkEl.href = href;
+              linkEl.as = 'document';
+              document.head.appendChild(linkEl);
+            }
+          });
+        });
       }
     }
-  });
 
-  // Close on ClientRouter navigation — menu stays open during swap, hiding old page
-  document.addEventListener('astro:after-swap', () => {
-    var nav = document.querySelector('.nav-links');
-    var toggle = document.querySelector('.nav-toggle');
-    toggle?.setAttribute('aria-expanded', 'false');
-    nav?.classList.remove('open');
-    document.documentElement.style.overflow = '';
-  });
+    toggle.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNav();
+    });
+    toggle.addEventListener('click', toggleNav);
+
+    // Close on escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.classList.remove('open');
+        toggle.focus();
+        document.documentElement.style.overflow = '';
+      }
+    });
+
+    // Close menu after ClientRouter navigation
+    document.addEventListener('astro:after-swap', function () {
+      if (nav.classList.contains('open')) {
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.classList.remove('open');
+        document.documentElement.style.overflow = '';
+      }
+    });
+  })();
 </script>
