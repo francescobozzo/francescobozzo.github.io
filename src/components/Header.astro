@@ -46,8 +46,9 @@ const navLinks = [
 
 <style>
   .site-header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     z-index: 100;
     width: 100%;
     height: var(--header-height);
@@ -98,7 +99,7 @@ const navLinks = [
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    touch-action: none;
   }
 
   .nav-toggle:focus-visible {
@@ -204,15 +205,15 @@ const navLinks = [
 
 <script is:inline>
   (function () {
-    var toggle = document.querySelector('.nav-toggle');
-    var nav = document.querySelector('.nav-links');
-    if (!toggle || !nav) return;
+    var prefetched = new Set();
 
-    var toggled = false;
+    function getToggle() { return document.querySelector('.nav-toggle'); }
+    function getNav() { return document.querySelector('.nav-links'); }
+
     function toggleNav() {
-      if (toggled) return;
-      toggled = true;
-      setTimeout(function () { toggled = false; }, 300);
+      var toggle = getToggle();
+      var nav = getNav();
+      if (!toggle || !nav) return;
 
       var isOpen = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!isOpen));
@@ -220,41 +221,46 @@ const navLinks = [
       document.documentElement.style.overflow = isOpen ? '' : 'hidden';
       // Prefetch nav pages when menu opens (hidden links skip Astro's IntersectionObserver)
       if (!isOpen) {
-        requestAnimationFrame(function () {
-          nav.querySelectorAll('a[href]').forEach(function (link) {
-            var href = link.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('http')) {
-              var linkEl = document.createElement('link');
-              linkEl.rel = 'prefetch';
-              linkEl.href = href;
-              linkEl.as = 'document';
-              document.head.appendChild(linkEl);
-            }
-          });
+        nav.querySelectorAll('a[href]').forEach(function (link) {
+          var href = link.getAttribute('href');
+          if (href && !href.startsWith('#') && !href.startsWith('http') && !prefetched.has(href)) {
+            prefetched.add(href);
+            var linkEl = document.createElement('link');
+            linkEl.rel = 'prefetch';
+            linkEl.href = href;
+            linkEl.as = 'document';
+            document.head.appendChild(linkEl);
+          }
         });
       }
     }
 
-    toggle.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleNav();
+    // Delegation — survives ClientRouter swaps
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-toggle')) {
+        toggleNav();
+      }
     });
-    toggle.addEventListener('click', toggleNav);
 
     // Close on escape
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && nav.classList.contains('open')) {
-        toggle.setAttribute('aria-expanded', 'false');
-        nav.classList.remove('open');
-        toggle.focus();
-        document.documentElement.style.overflow = '';
+      if (e.key === 'Escape') {
+        var nav = getNav();
+        var toggle = getToggle();
+        if (nav?.classList.contains('open')) {
+          toggle.setAttribute('aria-expanded', 'false');
+          nav.classList.remove('open');
+          toggle?.focus();
+          document.documentElement.style.overflow = '';
+        }
       }
     });
 
     // Close menu after ClientRouter navigation
     document.addEventListener('astro:after-swap', function () {
-      if (nav.classList.contains('open')) {
+      var nav = getNav();
+      var toggle = getToggle();
+      if (nav?.classList.contains('open')) {
         toggle.setAttribute('aria-expanded', 'false');
         nav.classList.remove('open');
         document.documentElement.style.overflow = '';
