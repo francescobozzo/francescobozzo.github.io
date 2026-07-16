@@ -14,12 +14,12 @@
       {
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            nodejs_22
+            nodejs_24
           ];
 
           # Ensure npm uses the right node
           shellHook = ''
-            echo "🚀 Astro dev environment (Node ${pkgs.nodejs_22.version})"
+            echo "🚀 Astro dev environment (Node ${pkgs.nodejs_24.version})"
           '';
         };
       }
