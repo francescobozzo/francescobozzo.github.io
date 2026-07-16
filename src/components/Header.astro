@@ -17,7 +17,7 @@ const navLinks = [
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-title">francescobozzo</a>
+    <a href="/" class="site-title">francesco.bozzo</a>
 
     <button
       class="nav-toggle"
@@ -30,7 +30,6 @@ const navLinks = [
       <span class="hamburger-line"></span>
     </button>
 
-    <ThemeToggle />
     <nav class="nav-links">
       {navLinks.map((link) => (
         <a
@@ -41,6 +40,7 @@ const navLinks = [
         </a>
       ))}
     </nav>
+    <ThemeToggle />
   </div>
 </header>
 
@@ -57,7 +57,7 @@ const navLinks = [
   }
 
   .header-inner {
-    max-width: 72ch;
+    max-width: min(calc(var(--content-max) + var(--page-padding) * 2), 100%);
     margin: 0 auto;
     padding: 0 var(--page-padding);
     height: 100%;
@@ -136,6 +136,7 @@ const navLinks = [
     align-items: center;
     gap: 0.25rem;
     margin-left: auto;
+    margin-right: 1rem;
   }
 
   .nav-link {
