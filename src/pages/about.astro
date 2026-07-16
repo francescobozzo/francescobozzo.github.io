@@ -1,152 +1,95 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="About — Francesco Bozzo" description="Learn more about Francesco Bozzo">
-  <h1>About</h1>
+<BaseLayout
+    title="About — Francesco Bozzo"
+    description="Learn more about Francesco Bozzo"
+>
+    <h1>About</h1>
 
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel malesuada
-    nulla. Nullam sit amet nulla eget nisl ultricies venenatis. Vivamus auctor, nisl
-    eget laoreet venenatis, nisl nunc egestas nunc, a laoreet nisl nunc egestas nunc.
-  </p>
+    <p>
+        I'm Francesco Bozzo, a Software Development Engineer II at Amazon in
+        Milan, Italy. I work in the Fulfillment Technologies organization
+        focusing on optimizing container flow and routing across Amazon
+        warehouses worldwide.
+    </p>
 
-  <p>
-    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-    commodo consequat.
-  </p>
+    <p>
+        Before Amazon, I was a Machine Learning Engineer at the Bruno Kessler
+        Foundation in Trento, developing deep learning models for industrial
+        equipment prognostics. I also worked with Wikipedia datasets at Eurecat
+        to investigate contributor drop-off from the platform.
+    </p>
 
-  <p>
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-    culpa qui officia deserunt mollit anim id est laborum.
-  </p>
+    <p>
+        I hold an MSc in Artificial Intelligence Systems and a BSc in Computer
+        Science, both with maximum grade with honors from the University of
+        Trento. My MSc thesis explored LLM-based planning for autonomous
+        software agents.
+    </p>
 
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </p>
+    <p>
+        Outside work, I am passionate about Nix for managing my machines,
+        including NixOS on my Strix Halo Framework Desktop and Nix Darwin on my
+        MacBook. I self-host multiple services for managing documents, photos,
+        DNS, search engine, home automation, monitoring and alerting, and
+        especially serving local LLMs. I am also passionate about reverse
+        engineering, which first introduced me to programming during high
+        school. I focus on reverse engineering Nintendo DS games, especially to
+        support fan translation projects.
+    </p>
 
-  <hr />
-
-  <h1>CV</h1>
-
-  <p>
-    <a href="/cv.pdf" download class="download-link">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-      Download PDF
-    </a>
-  </p>
-
-  <section>
-    <h2>Experience</h2>
-    <div class="cv-entry">
-      <div class="cv-header">
-        <strong>Job Title</strong>
-        <span class="cv-company">Company Name</span>
-      </div>
-      <time class="cv-date">2023 — Present</time>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </div>
-    <div class="cv-entry">
-      <div class="cv-header">
-        <strong>Previous Role</strong>
-        <span class="cv-company">Previous Company</span>
-      </div>
-      <time class="cv-date">2020 — 2023</time>
-      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>Education</h2>
-    <div class="cv-entry">
-      <div class="cv-header">
-        <strong>Degree</strong>
-        <span class="cv-company">University</span>
-      </div>
-      <time class="cv-date">2016 — 2020</time>
-    </div>
-  </section>
-
-  <section>
-    <h2>Skills</h2>
-    <ul class="skills-list">
-      <li>Skill 1</li>
-      <li>Skill 2</li>
-      <li>Skill 3</li>
-    </ul>
-  </section>
+    <p class="cv-download">
+        <a href="/resume.pdf" target="_blank" class="download-link">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                ></path><polyline points="7 10 12 15 17 10"></polyline><line
+                    x1="12"
+                    y1="15"
+                    x2="12"
+                    y2="3"></line></svg
+            >
+            Download Resume (PDF)
+        </a>
+    </p>
 </BaseLayout>
 
 <style>
-  .download-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-accent);
-    text-decoration: none;
-    padding: 0.4em 0.8em;
-    border: 1px solid var(--color-accent);
-    border-radius: 6px;
-    transition: background var(--transition-fast), color var(--transition-fast);
-  }
+    .cv-download {
+        text-align: center;
+        margin: 1.5em 0;
+    }
 
-  .download-link:hover {
-    background: var(--color-accent);
-    color: #ffffff;
-    text-decoration: none;
-  }
+    .download-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-accent);
+        text-decoration: none;
+        padding: 0.4em 0.8em;
+        border: 1px solid var(--color-accent);
+        border-radius: 6px;
+        transition:
+            background var(--transition-fast),
+            color var(--transition-fast);
+    }
 
-  section {
-    margin-top: 2rem;
-  }
-
-  .cv-entry {
-    margin-bottom: 1.5rem;
-    padding-left: 1rem;
-    border-left: 2px solid var(--color-border);
-  }
-
-  .cv-header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5em;
-    flex-wrap: wrap;
-    margin-bottom: 0.15em;
-  }
-
-  .cv-company {
-    color: var(--color-text-secondary);
-    font-size: 0.95em;
-  }
-
-  .cv-date {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin-bottom: 0.3em;
-  }
-
-  .skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    list-style: none;
-    padding: 0;
-  }
-
-  .skills-list li {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    padding: 0.2em 0.6em;
-    border-radius: 999px;
-    background: var(--color-tag-bg);
-    color: var(--color-tag-text);
-  }
+    .download-link:hover {
+        background: var(--color-accent);
+        color: #ffffff;
+        text-decoration: none;
+    }
 </style>
