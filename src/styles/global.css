@@ -34,7 +34,8 @@
   --font-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
 
   /* Sizes */
-  --content-max: 75ch;
+  --content-max: 85ch;
+  --header-max: calc(var(--content-max) + 6ch);
   --page-padding: 2rem;
   --header-height: 3.5rem;
 
