@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import { unified } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
+  integrations: [mdx()],
   site: 'https://francescobozzo.github.io',
   output: 'static',
   markdown: {
@@ -16,7 +18,7 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
-      // No inline default styles — CSS handles both themes via --shiki-* vars
+      // No inline default styles - CSS handles both themes via --shiki-* vars
       defaultColor: false,
     },
   },

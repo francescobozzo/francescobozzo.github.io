@@ -1,8 +1,8 @@
 /* ============================================
-   CSS Custom Properties — Light / Dark
+   CSS Custom Properties - Light / Dark
    ============================================ */
 :root {
-  /* Colors — Light (default) */
+  /* Colors - Light (default) */
   --color-bg: #ffffff;
   --color-bg-secondary: #f8f9fa;
   --color-text: #24292f;
@@ -134,7 +134,7 @@ body {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Site header background — hardcoded colors bypass CSS variable resolution delay */
+/* Site header background - hardcoded colors bypass CSS variable resolution delay */
 .site-header {
   background: #ffffff;
 }
@@ -142,7 +142,7 @@ body {
   background: #0d1117;
 }
 
-/* Mobile nav panel background — only when fixed/fullscreen */
+/* Mobile nav panel background - only when fixed/fullscreen */
 @media (max-width: 640px) {
   .nav-links {
     background: #ffffff;

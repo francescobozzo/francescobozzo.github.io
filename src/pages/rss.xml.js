@@ -14,7 +14,7 @@ export async function GET(context) {
     }));
 
   return rss({
-    title: 'Francesco Bozzo — Blog',
+    title: 'Francesco Bozzo - Blog',
     description: 'Thoughts on software, math, and everything in between.',
     site: context.site,
     items: posts,

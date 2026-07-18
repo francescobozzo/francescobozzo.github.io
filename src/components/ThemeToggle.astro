@@ -97,7 +97,7 @@
   // Sync icons on load (theme already applied by BaseLayout head script)
   updateIcons(getTheme());
 
-  // Event delegation — survives ClientRouter swaps
+  // Event delegation - survives ClientRouter swaps
   document.addEventListener('click', (e) => {
     var toggle = e.target.closest('.theme-toggle');
     if (!toggle) return;
@@ -112,7 +112,7 @@
     }
   });
 
-  // Preserve theme across ClientRouter navigations — apply before paint
+  // Preserve theme across ClientRouter navigations - apply before paint
   document.addEventListener('astro:before-swap', (e) => {
     var theme = getTheme();
     e.newDocument.documentElement.setAttribute('data-theme', theme);

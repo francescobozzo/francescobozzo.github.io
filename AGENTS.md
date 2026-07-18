@@ -77,5 +77,5 @@ npm install <package>
 
 ## See Also
 
-- [WORKLOG.md](./WORKLOG.md) — Todo list
-- [README.md](./README.md) — User-facing documentation
+- [WORKLOG.md](./WORKLOG.md) - Todo list
+- [README.md](./README.md) - User-facing documentation

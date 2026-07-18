@@ -1,0 +1,83 @@
+---
+title: "Nix Dotfiles"
+description: "Declarative system config for MacBook Pro (Nix Darwin) & Framework Desktop (NixOS). Self-hosts a home lab with AI inference, reverse proxy, dashboard, Home Assistant, Immich, Pi-hole, and backups."
+tags:
+  ["nix", "nixos", "nix-darwin", "home-lab", "infrastructure", "self-hosted"]
+repoUrl: "https://github.com/francescobozzo/nix-dotfiles"
+featured: true
+---
+
+import Mermaid from "../components/Mermaid.astro";
+
+## Architecture
+
+Two machines, one flake. The config uses [dendritic Nix](https://github.com/Doc-Steve/dendritic-design-with-flake-parts) to share modules across hosts while keeping host-specific overrides separate.
+
+Nix makes this setup fully reproducible - the same `flake.lock` produces identical system builds every time. Rollbacks are instant: if an update breaks something, switching to a previous generation restores the working state. Shared modules mean both machines reuse the same service configs, dev tooling, and security policies. And Nix's package repository is the largest of any package manager, making almost everything available as a pure, declarative dependency.
+
+## Hosts
+
+### Framework Desktop (neos)
+
+NixOS on AMD hardware with ROCm GPU and AMD NPU, 128GB of unified memory with 256GB/s theoretical bandwidth. Full disk encryption with LUKS + TPM2 unlock. Deployed remotely via `deploy-rs`.
+
+### MacBook Pro (M4 Pro)
+
+Nix Darwin on M4 Pro Apple Silicon with 24GB of unified memory. Manages macOS system config, Homebrew packages, App Store apps, and development tooling.
+
+## Self-Hosted Services
+
+<Mermaid
+  diagram={`
+graph LR
+  TF[Traefik]
+  TF --> GL[Glance Dashboard]
+  TF --> OW[Open WebUI]
+  TF --> LS[llama-swap]
+  TF --> HA[Home Assistant]
+  TF --> IM[Immich]
+  TF --> PH[Pi-hole]
+  TF --> PM[Prometheus]
+  TF --> GT[Gatus]
+  TF --> NT[Ntfy]
+  TF --> RS[Restic]
+  TF --> SX[SearXNG]
+  TF --> DD[DynDNS]
+  RS --> BB[Backblaze]
+  LS --> FM[FastFlowML<br/>NPU]
+  LS --> SD[Stable Diffusion<br/>ROCm]
+  LS --> LC[llama-cpp<br/>ROCm]
+  LS --> DS[ds4<br/>ROCm]
+`}
+/>
+
+### AI Stack
+
+- **llama-swap** - Reliable LLM model swapping that routes requests to backend inference engines for any local OpenAI- or Anthropic-compatible server.
+- **llama-cpp** - LLM inference with ROCm GPU support. Highest single-user performance.
+- **Stable Diffusion** - Image generation with ROCm GPU support.
+- **FastFlowML** - Low-power LLM inference on AMD NPU. Slower but more power-efficient.
+- **ds4** - antirez's [DwarfStar](https://github.com/antirez/ds4) with ROCm GPU support. Runs DeepSeek v4 Flash.
+- **Open WebUI** - Chat interface that connects to llama-swap internally.
+
+### Infrastructure
+
+- **Traefik** - Reverse proxy with automatic TLS. Single ingress point for all self-hosted services.
+- **Glance** - Personal dashboard with search, widgets, and custom bangs.
+- **Prometheus** - Metrics collection and system alerting.
+- **Gatus** - Automated developer-oriented status page with alerting and incident support.
+- **ntfy** - Simple HTTP-based pub-sub notification service. Sends push notifications to phone or desktop.
+- **Pi-hole** - DNS-based ad blocking for the local network. It also functions as DHCP server.
+- **DynDNS** - Dynamic DNS updates on CloudFlare for external access.
+
+### Home & Media
+
+- **Home Assistant** - Smart home automation.
+- **Immich** - Photo backup and management.
+- **SearXNG** - Metasearch engine which aggregates results from various search services.
+
+### Backup & Maintenance
+
+- **Restic** - Daily incremental encrypted backups uploaded to Backblaze B2.
+- **Logrotate** - Log rotation to limit disk usage.
+- **SOPS** - Secret files encrypted in-repo, decrypted at build time, placed on the filesystem.

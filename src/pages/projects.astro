@@ -8,12 +8,11 @@ const featured = allProjects.filter((p) => p.data.featured);
 const others = allProjects.filter((p) => !p.data.featured);
 ---
 
-<BaseLayout title="Projects — Francesco Bozzo" description="Projects by Francesco Bozzo">
+<BaseLayout title="Projects - Francesco Bozzo" description="Projects by Francesco Bozzo">
   <h1>Projects</h1>
 
   {featured.length > 0 && (
     <section>
-      <h2>Featured</h2>
       <div class="project-grid">
         {featured.map((project) => (
           <ProjectCard project={project} />
@@ -24,7 +23,6 @@ const others = allProjects.filter((p) => !p.data.featured);
 
   {others.length > 0 && (
     <section>
-      <h2>Other Projects</h2>
       <div class="project-grid">
         {others.map((project) => (
           <ProjectCard project={project} />

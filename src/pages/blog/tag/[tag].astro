@@ -28,7 +28,7 @@ export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
 const { tag, posts }: { tag: string; posts: typeof import('astro:content').CollectionEntry<'blog'>[] } = Astro.props;
 ---
 
-<BaseLayout title={`Tag: ${tag} — Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
+<BaseLayout title={`Tag: ${tag} - Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
   <h1>Tag: <span class="tag-label">{tag}</span></h1>
   <p class="post-count">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
   <a href="/blog" class="back-link">&larr; All posts</a>

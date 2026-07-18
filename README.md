@@ -8,8 +8,8 @@ Personal website built with [Astro](https://astro.build).
 - **LaTeX math** via KaTeX (`$inline$` and `$$block$$`)
 - **Dark mode** (system preference + manual toggle, persisted)
 - **Fast navigation** via Astro View Transitions (SPA-like, no full reloads)
-- **Lightweight** — zero JS by default, Tufte-inspired typography
-- **Responsive** — mobile-first with hamburger nav
+- **Lightweight** - zero JS by default, Tufte-inspired typography
+- **Responsive** - mobile-first with hamburger nav
 - **GitHub Pages** deployment via GitHub Actions
 
 ## Local Development
@@ -108,7 +108,7 @@ featured: true
 
 ## Deployment
 
-Push to `main` — GitHub Actions builds and deploys automatically.
+Push to `main` - GitHub Actions builds and deploys automatically.
 
 ```bash
 git push origin main

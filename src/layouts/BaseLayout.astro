@@ -16,7 +16,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Set theme before CSS loads — prevents flash -->
+    <!-- Set theme before CSS loads - prevents flash -->
     <script is:inline>
       (function(){
         var t = localStorage.getItem('theme');
@@ -38,7 +38,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="Francesco Bozzo — Blog RSS"
+      title="Francesco Bozzo - Blog RSS"
       href="/rss.xml"
     />
 
@@ -56,7 +56,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
         var p=location.pathname;
         function k(){return '__s:'+p}
 
-        // Debounced scroll saver — captures final position even during momentum
+        // Debounced scroll saver - captures final position even during momentum
         var scrollTimer;
         function saveScroll(){
           var y=window.scrollY;
@@ -90,7 +90,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
       </main>
       <Footer />
     </div>
-    <!-- Scroll restoration at end of body — DOM parsed, browser hasn't painted yet -->
+    <!-- Scroll restoration at end of body - DOM parsed, browser hasn't painted yet -->
     <script is:inline>
       var _y=sessionStorage.getItem('__s:'+location.pathname);
       if(_y!=null)window.scrollTo({top:+_y,behavior:'instant'});
