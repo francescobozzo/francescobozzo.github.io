@@ -56,6 +56,10 @@ function initMermaid() {
     startOnLoad: false,
     theme: getTheme(),
     securityLevel: 'sandbox',
+    // Respect user's motion preference
+    ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? { sequence: false }
+      : {}),
   });
 }
 

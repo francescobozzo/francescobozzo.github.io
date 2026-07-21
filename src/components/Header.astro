@@ -243,17 +243,28 @@ const navLinks = [
       }
     });
 
+    function closeNav() {
+      var nav = getNav();
+      var toggle = getToggle();
+      if (nav?.classList.contains('open')) {
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.classList.remove('open');
+        document.documentElement.style.overflow = '';
+      }
+    }
+
     // Close on escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        var nav = getNav();
-        var toggle = getToggle();
-        if (nav?.classList.contains('open')) {
-          toggle.setAttribute('aria-expanded', 'false');
-          nav.classList.remove('open');
-          toggle?.focus();
-          document.documentElement.style.overflow = '';
-        }
+        closeNav();
+        getToggle()?.focus();
+      }
+    });
+
+    // Close menu when a nav link is clicked (mobile)
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-link')) {
+        closeNav();
       }
     });
 
