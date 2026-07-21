@@ -3,93 +3,94 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-    title="About - Francesco Bozzo"
-    description="Learn more about Francesco Bozzo"
+  title="About - Francesco Bozzo"
+  description="Learn more about Francesco Bozzo"
 >
-    <h1>About</h1>
+  <h1>About</h1>
 
-    <p>
-        I'm Francesco Bozzo, a Software Development Engineer II at Amazon in
-        Milan, Italy. I work in the Fulfillment Technologies organization
-        focusing on optimizing container flow and routing across Amazon
-        warehouses worldwide.
-    </p>
+  <p>
+    I'm Francesco Bozzo, a Software Development Engineer II at Amazon in
+    Milan, Italy. I work in the Fulfillment Technologies organization
+    focusing on optimizing container flow and routing across Amazon
+    warehouses worldwide.
+  </p>
 
-    <p>
-        Before Amazon, I was a Machine Learning Engineer at the Bruno Kessler
-        Foundation in Trento, developing deep learning models for industrial
-        equipment prognostics. I also worked with Wikipedia datasets at Eurecat
-        to investigate contributor drop-off from the platform.
-    </p>
+  <p>
+    Before Amazon, I was a Machine Learning Engineer at the Bruno Kessler
+    Foundation in Trento, developing deep learning models for industrial
+    equipment prognostics. I also worked with Wikipedia datasets at Eurecat
+    to investigate contributor drop-off from the platform.
+  </p>
 
-    <p>
-        I hold an MSc in Artificial Intelligence Systems and a BSc in Computer
-        Science, both with maximum grade with honors from the University of
-        Trento. My MSc thesis explored LLM-based planning for autonomous
-        software agents.
-    </p>
+  <p>
+    I hold an MSc in Artificial Intelligence Systems and a BSc in Computer
+    Science, both with maximum grade with honors from the University of
+    Trento. My MSc thesis explored LLM-based planning for autonomous
+    software agents.
+  </p>
 
-    <p>
-        Outside work, I am passionate about Nix for managing my machines,
-        including NixOS on my Strix Halo Framework Desktop and Nix Darwin on my
-        MacBook. I self-host multiple services for managing documents, photos,
-        DNS, search engine, home automation, monitoring and alerting, and
-        especially serving local LLMs. I am also passionate about reverse
-        engineering, which first introduced me to programming during high
-        school. I focus on reverse engineering Nintendo DS games, especially to
-        support fan translation projects.
-    </p>
+  <p>
+    Outside work, I am passionate about Nix for managing my machines,
+    including NixOS on my Strix Halo Framework Desktop and Nix Darwin on my
+    MacBook. I self-host multiple services for managing documents, photos,
+    DNS, search engine, home automation, monitoring and alerting, and
+    especially serving local LLMs. I am also passionate about reverse
+    engineering, which first introduced me to programming during high
+    school. I focus on reverse engineering Nintendo DS games, especially to
+    support fan translation projects.
+  </p>
 
-    <p class="cv-download">
-        <a href="/resume.pdf" target="_blank" class="download-link">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                ></path><polyline points="7 10 12 15 17 10"></polyline><line
-                    x1="12"
-                    y1="15"
-                    x2="12"
-                    y2="3"></line></svg
-            >
-            Download Resume (PDF)
-        </a>
-    </p>
+  <p class="cv-download">
+    <a href="/resume.pdf" target="_blank" class="download-link">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+        ></path><polyline points="7 10 12 15 17 10"></polyline><line
+          x1="12"
+          y1="15"
+          x2="12"
+          y2="3"
+        ></line></svg
+      >
+      Download Resume (PDF)
+    </a>
+  </p>
 </BaseLayout>
 
 <style>
-    .cv-download {
-        text-align: center;
-        margin: 1.5em 0;
-    }
+  .cv-download {
+    text-align: center;
+    margin: 1.5em 0;
+  }
 
-    .download-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4em;
-        font-family: var(--font-sans);
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--color-accent);
-        text-decoration: none;
-        padding: 0.4em 0.8em;
-        border: 1px solid var(--color-accent);
-        border-radius: 6px;
-        transition:
-            background var(--transition-fast),
-            color var(--transition-fast);
-    }
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    text-decoration: none;
+    padding: 0.4em 0.8em;
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
+  }
 
-    .download-link:hover {
-        background: var(--color-accent);
-        color: #ffffff;
-        text-decoration: none;
-    }
+  .download-link:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
 </style>

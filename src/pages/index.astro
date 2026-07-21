@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { formatDateCompact } from '../lib/formatDate';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -11,8 +12,7 @@ const posts = (await getCollection('blog'))
   <section class="hero">
     <h1>Francesco Bozzo</h1>
     <p class="tagline">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-      incididunt ut labore et dolore magna aliqua.
+      Software engineer writing about code, math, and systems.
     </p>
     <nav class="hero-links">
       <a href="/about">About</a>
@@ -31,11 +31,7 @@ const posts = (await getCollection('blog'))
           <li class="post-item">
             <a href={`/blog/${post.id}`}>
               <time datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
+                {formatDateCompact(post.data.pubDate)}
               </time>
               <span class="post-title">{post.data.title}</span>
             </a>

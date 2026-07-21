@@ -1,5 +1,8 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { readingTime } from '../lib/readingTime';
+import { formatDateCompact } from '../lib/formatDate';
+import Tags from './Tags.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -8,10 +11,7 @@ interface Props {
 const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
 
-const readingTime = Math.max(
-  1,
-  Math.round(post.body.split(/\s+/).length / 200),
-);
+const minutes = readingTime(post.body);
 ---
 
 <article class="post-card">
@@ -20,22 +20,14 @@ const readingTime = Math.max(
   </h2>
   <div class="post-meta">
     <time datetime={pubDate.toISOString()}>
-      {pubDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })}
+      {formatDateCompact(pubDate)}
     </time>
     <span class="meta-sep">&middot;</span>
-    <span class="reading-time">{readingTime} min read</span>
+    <span class="reading-time">{minutes} min read</span>
     {tags.length > 0 && (
       <>
         <span class="meta-sep">&middot;</span>
-        <div class="post-tags">
-          {tags.map((tag) => (
-            <a href={`/blog/tag/${tag}`} class="tag">{tag}</a>
-          ))}
-        </div>
+        <Tags tags={tags} link size="sm" />
       </>
     )}
   </div>
@@ -82,26 +74,6 @@ const readingTime = Math.max(
 
   .meta-sep {
     color: var(--color-text-muted);
-  }
-
-  .post-tags {
-    display: flex;
-    gap: 0.3rem;
-  }
-
-  .tag {
-    font-size: 0.75rem;
-    padding: 0.1em 0.45em;
-    border-radius: 999px;
-    background: var(--color-tag-bg);
-    color: var(--color-tag-text);
-    text-decoration: none;
-    transition: background var(--transition-fast);
-  }
-
-  .tag:hover {
-    background: var(--color-accent);
-    color: #ffffff;
   }
 
   .post-excerpt {

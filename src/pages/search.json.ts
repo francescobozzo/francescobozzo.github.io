@@ -10,11 +10,15 @@ export const GET: APIRoute = async () => {
     description: post.data.description,
     pubDate: post.data.pubDate.toISOString(),
     tags: post.data.tags,
-    body: post.body,
+    // Truncate body to ~500 chars to keep search index small
+    body: post.body.slice(0, 500),
     url: `/blog/${post.id}/`,
   }));
 
   return new Response(JSON.stringify(data), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+    },
   });
 };

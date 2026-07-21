@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { readingTime } from '../../lib/readingTime';
+import { formatDate } from '../../lib/formatDate';
+import Tags from '../../components/Tags.astro';
 import type { GetStaticPathsItem } from 'astro';
 
 export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
@@ -17,10 +20,7 @@ const { post } = Astro.props;
 const { title, description, pubDate, updatedDate, tags } = post.data;
 const { Content } = await render(post);
 
-const readingTime = Math.max(
-  1,
-  Math.round(post.body.split(/\s+/).length / 200),
-);
+const minutes = readingTime(post.body);
 
 // Prev/Next navigation
 const allPosts = (await getCollection('blog')).sort(
@@ -37,22 +37,14 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
       <h1>{title}</h1>
       <div class="post-meta">
         <time datetime={pubDate.toISOString()}>
-          {pubDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
+          {formatDate(pubDate)}
         </time>
         <span class="meta-sep">&middot;</span>
-        <span>{readingTime} min read</span>
+        <span>{minutes} min read</span>
         {tags.length > 0 && (
           <>
             <span class="meta-sep">&middot;</span>
-            <div class="post-tags">
-              {tags.map((tag) => (
-                <a href={`/blog/tag/${tag}`}>{tag}</a>
-              ))}
-            </div>
+            <Tags tags={tags} link size="sm" />
           </>
         )}
       </div>
@@ -63,7 +55,7 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
     </div>
 
     {updatedDate && (
-      <p class="updated-notice">Updated {updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      <p class="updated-notice">Updated {formatDate(updatedDate)}</p>
     )}
 
     <nav class="post-nav">
@@ -109,26 +101,6 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
 
   .meta-sep {
     color: var(--color-text-muted);
-  }
-
-  .post-tags {
-    display: flex;
-    gap: 0.3rem;
-  }
-
-  .post-tags a {
-    font-size: 0.8rem;
-    padding: 0.1em 0.45em;
-    border-radius: 999px;
-    background: var(--color-tag-bg);
-    color: var(--color-tag-text);
-    text-decoration: none;
-    transition: background var(--transition-fast);
-  }
-
-  .post-tags a:hover {
-    background: var(--color-accent);
-    color: #ffffff;
   }
 
   .post-content {

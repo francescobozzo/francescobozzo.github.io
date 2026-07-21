@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import GitHubIcon from './GitHubIcon.astro';
+import Tags from './Tags.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -24,11 +25,7 @@ const detailUrl = `/projects/${project.id}`;
     </h3>
     <p class="project-description">{description}</p>
     <div class="project-meta">
-      {tags.length > 0 && (
-        <div class="project-tags">
-          {tags.map((tag) => <span class="tag">{tag}</span>)}
-        </div>
-      )}
+      {tags.length > 0 && <Tags tags={tags} size="md" />}
       <div class="project-links">
         {repoUrl && (
           <a href={repoUrl} target="_blank" rel="noopener" aria-label="Repository">
@@ -112,22 +109,6 @@ const detailUrl = `/projects/${project.id}`;
     flex-wrap: wrap;
   }
 
-  .project-tags {
-    display: flex;
-    gap: 0.35rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    padding: 0.15em 0.5em;
-    border-radius: 999px;
-    background: var(--color-tag-bg);
-    color: var(--color-tag-text);
-  }
-
   .project-links {
     display: flex;
     gap: 0.5rem;
@@ -141,6 +122,4 @@ const detailUrl = `/projects/${project.id}`;
   .project-links a:hover {
     color: var(--color-accent);
   }
-
-
 </style>

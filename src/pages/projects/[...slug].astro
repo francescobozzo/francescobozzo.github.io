@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GitHubIcon from '../../components/GitHubIcon.astro';
+import Tags from '../../components/Tags.astro';
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPathsItem } from 'astro';
 
@@ -15,21 +16,22 @@ export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
 }
 
 const { project } = Astro.props;
-const { title, description, tags, repoUrl, demoUrl } = project.data;
+const { title, description, tags, repoUrl, demoUrl, imageUrl } = project.data;
 const { Content } = await render(project);
 ---
 
 <BaseLayout title={`${title} - Francesco Bozzo`} description={description}>
   <article class="project-detail">
     <header class="project-header">
+      {imageUrl && (
+        <div class="project-image">
+          <img src={imageUrl} alt={title} />
+        </div>
+      )}
       <h1>{title}</h1>
       <p class="project-description">{description}</p>
       <div class="project-meta">
-        {tags.length > 0 && (
-          <div class="project-tags">
-            {tags.map((tag) => <span class="tag">{tag}</span>)}
-          </div>
-        )}
+        {tags.length > 0 && <Tags tags={tags} size="md" />}
         <div class="project-links">
           {repoUrl && (
             <a href={repoUrl} target="_blank" rel="noopener" class="project-link">
@@ -71,6 +73,17 @@ const { Content } = await render(project);
     margin-bottom: 0.3em;
   }
 
+  .project-image {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
   .project-description {
     font-size: 1.05rem;
     color: var(--color-text-secondary);
@@ -84,22 +97,6 @@ const { Content } = await render(project);
     gap: 0.75rem;
     flex-wrap: wrap;
     justify-content: space-between;
-  }
-
-  .project-tags {
-    display: flex;
-    gap: 0.35rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.15em 0.5em;
-    border-radius: 999px;
-    background: var(--color-tag-bg);
-    color: var(--color-tag-text);
   }
 
   .project-links {

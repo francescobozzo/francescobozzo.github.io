@@ -1,0 +1,59 @@
+---
+interface Props {
+  tags: string[];
+  /** If set, tags render as links to /blog/tag/{tag} */
+  link?: boolean;
+  /** Size variant: "sm" for compact, "md" for default */
+  size?: 'sm' | 'md';
+}
+
+const { tags, link = false, size = 'md' } = Astro.props;
+---
+
+{link ? (
+  <div class="tags tags--link">
+    {tags.map((tag) => (
+      <a href={`/blog/tag/${tag}`} class={`tag tag--${size}`}>{tag}</a>
+    ))}
+  </div>
+) : (
+  <div class="tags">
+    {tags.map((tag) => (
+      <span class={`tag tag--${size}`}>{tag}</span>
+    ))}
+  </div>
+)}
+
+<style>
+  .tags {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    border-radius: 999px;
+    background: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    text-decoration: none;
+    transition: background var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .tag--sm {
+    font-size: 0.75rem;
+    padding: 0.1em 0.45em;
+  }
+
+  .tag--md {
+    font-size: 0.7rem;
+    padding: 0.15em 0.5em;
+  }
+
+  .tag--link:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+</style>

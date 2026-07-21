@@ -135,21 +135,15 @@ body {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Site header background - hardcoded colors bypass CSS variable resolution delay */
+/* Site header background */
 .site-header {
-  background: #ffffff;
-}
-[data-theme='dark'] .site-header {
-  background: #0d1117;
+  background: var(--color-header-bg);
 }
 
 /* Mobile nav panel background - only when fixed/fullscreen */
 @media (max-width: 640px) {
   .nav-links {
-    background: #ffffff;
-  }
-  [data-theme='dark'] .nav-links {
-    background: #0d1117;
+    background: var(--color-header-bg);
   }
 }
 
@@ -243,16 +237,16 @@ em {
   pointer-events: none;
 }
 
-/* Shiki: bg hardcoded (flash fix), span colors use CSS vars for syntax highlighting */
+/* Shiki: span colors use CSS vars for syntax highlighting */
 .astro-code {
-  background-color: #f6f8fa;
+  background-color: var(--color-code-bg);
   color: var(--shiki-light);
 }
 .astro-code span {
   color: var(--shiki-light);
 }
 [data-theme='dark'] .astro-code {
-  background-color: #24292e;
+  background-color: var(--color-code-bg);
   color: var(--shiki-dark);
 }
 [data-theme='dark'] .astro-code span {

@@ -7,8 +7,8 @@ const { diagram } = Astro.props;
 ---
 
 <div class="mermaid-wrapper">
-  <div class="mermaid" data-diagram={diagram}>
-    <pre class="mermaid-source">{diagram}</pre>
+  <div class="mermaid">
+    <pre class="mermaid-source" hidden>{diagram}</pre>
   </div>
 </div>
 
@@ -23,16 +23,6 @@ const { diagram } = Astro.props;
     overflow-x: auto;
   }
 
-  .mermaid-source {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    text-align: left;
-    padding: 0.5rem;
-    margin: 0;
-    white-space: pre;
-  }
-
   .mermaid {
     line-height: 0;
   }
@@ -42,39 +32,60 @@ const { diagram } = Astro.props;
     height: auto;
     display: block;
   }
+
+  .mermaid-error {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-align: left;
+    padding: 0.5rem;
+    margin: 0;
+    white-space: pre;
+  }
 </style>
 
 <script>
 import mermaid from 'mermaid';
 
-mermaid.initialize({
-  startOnLoad: false,
-  theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
-  securityLevel: 'sandbox',
-});
+function getTheme() {
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+}
+
+function initMermaid() {
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: getTheme(),
+    securityLevel: 'sandbox',
+  });
+}
 
 function renderAll() {
-  const elements = document.querySelectorAll('.mermaid[data-diagram]');
+  const elements = document.querySelectorAll('.mermaid');
   elements.forEach((el) => {
-    const diagram = el.getAttribute('data-diagram');
-    if (!diagram) return;
-    const id = `mermaid-${Math.random().toString(36).slice(2, 8)}`;
+    const source = el.querySelector('.mermaid-source');
+    if (!source) return;
+    const diagram = source.textContent || '';
+    if (!diagram.trim()) return;
+
+    // Clear previous content (SVG or error)
+    el.innerHTML = '';
+
+    const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`;
     mermaid.render(id, diagram).then((result) => {
       el.innerHTML = result.svg;
     }).catch((err) => {
       console.error('Mermaid render error:', err);
-      el.innerHTML = `<pre class="mermaid-source">${diagram}</pre><p class="mermaid-error">Diagram failed to render</p>`;
+      el.innerHTML = `<pre class="mermaid-error">${diagram}</pre>`;
     });
   });
 }
 
+initMermaid();
+renderAll();
+
 // Re-render on theme change
 document.addEventListener('astro:after-swap', () => {
-  mermaid.initialize({
-    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
-  });
+  initMermaid();
   renderAll();
 });
-
-renderAll();
 </script>
