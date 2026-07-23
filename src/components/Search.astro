@@ -111,6 +111,7 @@
     const input = document.getElementById('search-input');
     const results = document.getElementById('search-results');
 
+    /** @type {{ id: string; title: string; description: string; pubDate: string; tags: string[]; body: string; url: string }[]} */
     let posts = [];
 
     try {

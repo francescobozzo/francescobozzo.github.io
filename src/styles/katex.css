@@ -1,5 +1,5 @@
 /* KaTeX base - loaded via layout */
-@import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
+@import url('https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css');
 
 /* KaTeX dark mode adjustments */
 [data-theme='dark'] {
@@ -29,6 +29,4 @@
   overflow-y: hidden;
 }
 
-/* Verify KaTeX stylesheet loaded */
-.katex-version { display: none; }
-.katex-version::after { content: "0.10.2 or earlier"; }
+

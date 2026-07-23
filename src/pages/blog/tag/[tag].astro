@@ -2,7 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import type { GetStaticPathsItem } from 'astro';
+import type { CollectionEntry, GetStaticPathsItem } from 'astro';
 
 export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
   const posts = getCollection('blog');
@@ -25,7 +25,7 @@ export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
   });
 }
 
-const { tag, posts }: { tag: string; posts: typeof import('astro:content').CollectionEntry<'blog'>[] } = Astro.props;
+const { tag, posts }: { tag: string; posts: CollectionEntry<'blog'>[] } = Astro.props;
 ---
 
 <BaseLayout title={`Tag: ${tag} - Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
