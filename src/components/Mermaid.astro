@@ -28,7 +28,7 @@ const { diagram } = Astro.props;
   }
 
   .mermaid svg {
-    max-width: 100%;
+    width: 100%;
     height: auto;
     display: block;
   }
@@ -55,7 +55,7 @@ function initMermaid() {
   mermaid.initialize({
     startOnLoad: false,
     theme: getTheme(),
-    securityLevel: 'sandbox',
+    securityLevel: 'strict',
     // Respect user's motion preference
     ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? { sequence: false }
