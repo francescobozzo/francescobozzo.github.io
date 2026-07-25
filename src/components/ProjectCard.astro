@@ -14,35 +14,33 @@ const { title, description, tags, demoUrl, repoUrl, imageUrl } = project.data;
 const detailUrl = `/projects/${project.id}`;
 ---
 
-<article class="project-card">
+<a href={detailUrl} class="project-card">
   {imageUrl && (
     <div class="project-image">
       <img src={imageUrl} alt={title} loading="lazy" />
     </div>
   )}
   <div class="project-body">
-    <h3 class="project-title">
-      <a href={detailUrl}>{title}</a>
-    </h3>
+    <h3 class="project-title">{title}</h3>
     <p class="project-description">{description}</p>
     <div class="project-meta">
       {tags.length > 0 && <Tags tags={tags} size="md" />}
       <div class="project-links">
         {repoUrl && (
-          <a href={repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Repository">
+          <button class="project-link-btn" onclick={`window.open('${repoUrl}', '_blank', 'noopener')`} aria-label="Repository">
             <GitHubIcon size={16} />
-          </a>
+          </button>
         )}
         {demoUrl && (
-          <a href={demoUrl} target="_blank" rel="noopener noreferrer" aria-label="Live demo">
+          <button class="project-link-btn" onclick={`window.open('${demoUrl}', '_blank', 'noopener')`} aria-label="Live demo">
             <ExternalLinkIcon size={16} />
-          </a>
+          </button>
         )}
       </div>
     </div>
 
   </div>
-</article>
+</a>
 
 <style>
   .project-card {
@@ -54,11 +52,13 @@ const detailUrl = `/projects/${project.id}`;
     background: var(--color-card-bg);
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     overflow: hidden;
+    text-decoration: none;
+    color: inherit;
   }
 
   .project-card:hover {
     border-color: var(--color-card-hover-border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .project-image {
@@ -83,16 +83,7 @@ const detailUrl = `/projects/${project.id}`;
     font-size: 1.1rem;
     font-weight: 600;
     margin: 0 0 0.4em;
-  }
-
-  .project-title a {
     color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .project-title a:hover {
-    color: var(--color-accent);
-    text-decoration: underline;
   }
 
   .project-description {
@@ -115,12 +106,19 @@ const detailUrl = `/projects/${project.id}`;
     gap: 0.5rem;
   }
 
-  .project-links a {
+  .project-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
     color: var(--color-text-muted);
     transition: color var(--transition-fast);
   }
 
-  .project-links a:hover {
+  .project-link-btn:hover {
     color: var(--color-accent);
   }
 </style>
