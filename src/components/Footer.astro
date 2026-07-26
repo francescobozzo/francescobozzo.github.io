@@ -4,16 +4,15 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <span class="footer-copy">&copy; {year} Francesco Bozzo
-      <span class="sep">&middot;</span>
-      <a href="/rss.xml" class="rss-icon" title="RSS Feed" aria-label="RSS Feed">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-      </a>
-    </span>
+    <span class="footer-copy">&copy; {year} Francesco Bozzo</span>
     <div class="footer-links">
       <a href="https://github.com/francescobozzo" target="_blank" rel="noopener noreferrer">GitHub</a>
       <span class="sep">&middot;</span>
       <a href="https://www.linkedin.com/in/francesco-bozzo-fb/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <span class="sep">&middot;</span>
+      <a href="/rss.xml" class="rss-icon" title="RSS Feed" aria-label="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
     </div>
   </div>
 </footer>
@@ -45,15 +44,14 @@ const year = new Date().getFullYear();
   .rss-icon {
     display: inline-flex;
     align-items: center;
-    margin-left: 0.3em;
     color: var(--color-text-secondary);
     text-decoration: none;
-    vertical-align: sub;
     transition: color var(--transition-fast);
   }
 
   .rss-icon:hover {
     color: var(--color-accent);
+    text-decoration: underline;
   }
 
   .footer-links {
