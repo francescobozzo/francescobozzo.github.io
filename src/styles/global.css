@@ -7,7 +7,7 @@
   --color-bg-secondary: #f8f9fa;
   --color-text: #24292f;
   --color-text-secondary: #57606a;
-  --color-text-muted: #8b949e;
+  --color-text-muted: #656d76;
   --color-border: #d0d7de;
   --color-accent: #0969da;
   --color-accent-hover: #0550ae;
@@ -53,7 +53,7 @@
   --color-bg-secondary: #161b22;
   --color-text: #c9d1d9;
   --color-text-secondary: #8b949e;
-  --color-text-muted: #6e7681;
+  --color-text-muted: #7c8590;
   --color-border: #30363d;
   --color-accent: #58a6ff;
   --color-accent-hover: #79c0ff;
@@ -181,6 +181,13 @@ a:hover {
 
 a:visited {
   color: var(--color-link-visited);
+}
+
+/* Content links: persistent underline so they don't rely on color alone (WCAG 2.1 AA) */
+.post-content a,
+.project-content a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 strong {
