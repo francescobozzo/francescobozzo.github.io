@@ -1,0 +1,100 @@
+---
+// Back-to-top button: shows after scrolling down, smooth-scrolls to top
+---
+
+<button id="back-to-top" aria-label="Back to top" title="Back to top">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+</button>
+
+<style>
+  #back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity var(--transition-fast),
+      transform var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      background var(--transition-fast);
+  }
+
+  #back-to-top:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  #back-to-top.show {
+    display: inline-flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Throttle scroll handler to ~60fps
+  function throttle(fn: () => void, wait: number) {
+    let last = 0;
+    return () => {
+      const now = Date.now();
+      if (now - last >= wait) {
+        last = now;
+        fn();
+      }
+    };
+  }
+
+  function toggleButton() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    // Show after scrolling 300px down
+    if (window.scrollY > 300) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function init() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    btn.addEventListener('click', scrollToTop);
+    window.addEventListener('scroll', throttle(toggleButton, 100), { passive: true });
+    // Check on load (handles page load at scroll position)
+    toggleButton();
+  }
+
+  init();
+
+  // Re-init after client-side navigation (button is recreated on swap)
+  document.addEventListener('astro:after-swap', init);
+</script>

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/katex.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
@@ -89,6 +90,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
         <slot />
       </main>
       <Footer />
+      <BackToTop />
     </div>
     <!-- Scroll restoration at end of body - DOM parsed, browser hasn't painted yet -->
     <script is:inline>
