@@ -45,14 +45,20 @@ const { diagram } = Astro.props;
 </style>
 
 <script>
-import mermaid from 'mermaid';
+// Lazy-load mermaid only when a diagram element exists on the page.
+// This avoids bundling the entire mermaid library (600+KB) for pages
+// that don't use mermaid diagrams.
+let mermaidInstance: any = null;
 
 function getTheme() {
   return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
 }
 
-function initMermaid() {
-  mermaid.initialize({
+async function loadMermaid() {
+  if (mermaidInstance) return mermaidInstance;
+  const mermaid = await import('mermaid');
+  mermaidInstance = mermaid;
+  mermaid.default.initialize({
     startOnLoad: false,
     theme: getTheme(),
     securityLevel: 'strict',
@@ -61,10 +67,16 @@ function initMermaid() {
       ? { sequence: false }
       : {}),
   });
+  return mermaid;
 }
 
-function renderAll() {
+async function renderAll() {
+  // Only load mermaid if there are diagram elements to render
   const elements = document.querySelectorAll('.mermaid');
+  if (elements.length === 0) return;
+
+  const mermaid = await loadMermaid();
+
   elements.forEach((el) => {
     const source = el.querySelector('.mermaid-source');
     if (!source) return;
@@ -75,21 +87,21 @@ function renderAll() {
     el.innerHTML = '';
 
     const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`;
-    mermaid.render(id, diagram).then((result) => {
+    mermaid.default.render(id, diagram).then((result: any) => {
       el.innerHTML = result.svg;
-    }).catch((err) => {
+    }).catch((err: any) => {
       console.error('Mermaid render error:', err);
       el.innerHTML = `<pre class="mermaid-error">${diagram}</pre>`;
     });
   });
 }
 
-initMermaid();
 renderAll();
 
-// Re-render on theme change
+// Re-render on theme change and after client-side navigation
 document.addEventListener('astro:after-swap', () => {
-  initMermaid();
+  // Reset cached instance so theme re-initializes
+  mermaidInstance = null;
   renderAll();
 });
 </script>

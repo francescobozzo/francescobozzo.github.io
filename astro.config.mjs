@@ -9,6 +9,13 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   site: 'https://francescobozzo.github.io',
   output: 'static',
+  // Mermaid bundles all diagram types into one large chunk (~660KB).
+  // It's dynamically imported so only loads on pages with diagrams.
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 700,
+    },
+  },
   markdown: {
     processor: unified({
       remarkPlugins: [remarkMath],
