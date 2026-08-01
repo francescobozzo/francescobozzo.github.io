@@ -31,6 +31,7 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
    title: string (required)
    description: string (required)
    tags: string[] (default: [])
+   imageUrl: string (optional) — absolute URL or root-relative path
    demoUrl: url (optional)
    repoUrl: url (optional)
    featured: boolean (default: false)
@@ -40,7 +41,7 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
 
 8. **Dark mode**: Toggle in Header. Persists to `localStorage.theme`. Respects `prefers-color-scheme`. `astro:after-swap` preserves across navigations.
 
-9. **Math**: KaTeX via remark-math + rehype-katex. Inline `$...$`, block `$$...$$`. KaTeX CSS loaded globally.
+9. **Math**: KaTeX via remark-math + rehype-katex. Inline `$...$`, block `$$...$$`. KaTeX CSS loaded only on pages whose body contains math (`src/components/KaTeX.astro` + `src/lib/math.ts`).
 
 10. **Navigation**: `<ClientRouter />` in BaseLayout. Use `astro:after-swap` for scripts that need re-running.
 
