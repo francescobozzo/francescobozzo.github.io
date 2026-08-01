@@ -20,7 +20,13 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     tags: z.array(z.string()).default([]),
-    imageUrl: z.string().optional(),
+    imageUrl: z
+      .string()
+      .refine(
+        (v) => /^(https?:\/\/|\/)/.test(v),
+        'imageUrl must be an absolute URL or a root-relative path',
+      )
+      .optional(),
     demoUrl: z.string().url().optional(),
     repoUrl: z.string().url().optional(),
     featured: z.boolean().default(false),
