@@ -33,10 +33,17 @@ const { tag, posts }: { tag: string; posts: CollectionEntry<'blog'>[] } = Astro.
   <p class="post-count">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
   <a href="/blog" class="back-link">&larr; All posts</a>
 
-  {posts.map((post) => <PostCard post={post} />)}
+  {posts.length > 0
+    ? posts.map((post) => <PostCard post={post} />)
+    : <p class="empty-state">No posts with this tag yet.</p>}
 </BaseLayout>
 
 <style>
+  .empty-state {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
   .tag-label {
     color: var(--color-accent);
   }
