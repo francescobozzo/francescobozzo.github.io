@@ -30,8 +30,11 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : null;
     <!-- Set theme before CSS loads - prevents flash -->
     <script is:inline>
       (function(){
-        var t = localStorage.getItem('theme');
-        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var stored = localStorage.getItem('theme');
+        var t;
+        // Explicit light/dark win; otherwise auto follows the OS preference
+        if (stored === 'light' || stored === 'dark') t = stored;
+        else t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', t);
         var m = document.querySelector('meta[name="theme-color"]');
         if (m) m.setAttribute('content', t === 'dark' ? '#0d1117' : '#ffffff');

@@ -39,7 +39,7 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
 
 7. **CSS**: Custom properties in `:root` for theming. `[data-theme='dark']` for dark mode. All colors use CSS vars.
 
-8. **Dark mode**: Toggle in Header. Persists to `localStorage.theme`. Respects `prefers-color-scheme`. `astro:after-swap` preserves across navigations.
+8. **Dark mode**: Toggle in Header with three states (`auto` / `light` / `dark`), stored in `localStorage.theme` (default `auto`). `auto` follows `prefers-color-scheme`. Effective theme applied pre-paint; `astro:before-swap` preserves across navigations.
 
 9. **Math**: KaTeX via remark-math + rehype-katex. Inline `$...$`, block `$$...$$`. KaTeX CSS loaded only on pages whose body contains math (`src/components/KaTeX.astro` + `src/lib/math.ts`).
 

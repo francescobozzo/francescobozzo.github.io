@@ -1,19 +1,25 @@
 ---
 /**
- * Dark/Light mode toggle.
- * - Reads localStorage.theme on init
- * - Falls back to prefers-color-scheme
- * - Persists choice to localStorage
- * - Listens to astro:after-swap for ClientRouter navigation
+ * Theme toggle with three states: auto / light / dark.
+ * - mode stored in localStorage.theme ('auto' | 'light' | 'dark'), default 'auto'
+ * - 'auto' follows prefers-color-scheme and updates live on OS change
+ * - click cycles auto -> light -> dark -> auto
+ * - effective theme applied pre-paint + preserved across ClientRouter navigation
  */
 ---
 
 <button
   class="theme-toggle"
-  aria-label="Toggle dark mode"
+  aria-label="Theme: auto (follows system)"
   type="button"
 >
-  <!-- Sun icon -->
+  <!-- Auto (system) icon -->
+  <svg class="icon-auto" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="18" height="14" x="3" y="3" rx="2" />
+    <line x1="12" y1="3" x2="12" y2="21" />
+    <path d="M8 21h8" />
+  </svg>
+  <!-- Sun icon (light) -->
   <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5" />
     <line x1="12" y1="1" x2="12" y2="3" />
@@ -25,7 +31,7 @@
     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
   </svg>
-  <!-- Moon icon -->
+  <!-- Moon icon (dark) -->
   <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </svg>
@@ -57,11 +63,13 @@
     outline-offset: 2px;
   }
 
+  .icon-auto,
   .icon-sun,
   .icon-moon {
     position: absolute;
   }
 
+  .icon-auto.hidden,
   .icon-sun.hidden,
   .icon-moon.hidden {
     display: none;
@@ -69,24 +77,35 @@
 </style>
 
 <script is:inline>
-  function getTheme() {
+  function getMode() {
     var t = localStorage.getItem('theme');
-    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    return t;
+    return t === 'light' || t === 'dark' || t === 'auto' ? t : 'auto';
   }
 
-  function updateIcons(theme) {
+  function getSystem() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function effective(mode) {
+    return mode === 'auto' ? getSystem() : mode;
+  }
+
+  function updateIcons(mode) {
     var toggle = document.querySelector('.theme-toggle');
     if (!toggle) return;
+    var auto = toggle.querySelector('.icon-auto');
     var sun = toggle.querySelector('.icon-sun');
     var moon = toggle.querySelector('.icon-moon');
-    if (theme === 'dark') {
-      sun?.classList.remove('hidden');
-      moon?.classList.add('hidden');
-    } else {
-      sun?.classList.add('hidden');
-      moon?.classList.remove('hidden');
-    }
+    auto?.classList.toggle('hidden', mode !== 'auto');
+    sun?.classList.toggle('hidden', mode !== 'light');
+    moon?.classList.toggle('hidden', mode !== 'dark');
+    var label = mode === 'auto'
+      ? 'Theme: auto (follows system)'
+      : mode === 'light'
+        ? 'Theme: light'
+        : 'Theme: dark';
+    toggle.setAttribute('aria-label', label);
+    toggle.setAttribute('title', label);
   }
 
   function setThemeColor(theme) {
@@ -94,39 +113,41 @@
     if (m) m.setAttribute('content', theme === 'dark' ? '#0d1117' : '#ffffff');
   }
 
-  function applyTheme(theme) {
+  function applyTheme(mode) {
+    var theme = effective(mode);
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    updateIcons(theme);
+    localStorage.setItem('theme', mode);
+    updateIcons(mode);
     setThemeColor(theme);
   }
 
   // Sync icons on load (theme already applied by BaseLayout head script)
-  updateIcons(getTheme());
+  updateIcons(getMode());
 
-  // Event delegation - survives ClientRouter swaps
+  // Click cycles auto -> light -> dark -> auto
   document.addEventListener('click', (e) => {
     var toggle = e.target.closest('.theme-toggle');
     if (!toggle) return;
-    var current = document.documentElement.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
+    var order = ['auto', 'light', 'dark'];
+    var cur = getMode();
+    var next = order[(order.indexOf(cur) + 1) % 3];
+    applyTheme(next);
   });
 
-  // System preference change
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
+  // OS preference change: only matters while in auto mode
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (getMode() === 'auto') applyTheme('auto');
   });
 
-  // Preserve theme across ClientRouter navigations - apply before paint
+  // Preserve effective theme across ClientRouter navigation - apply before paint
   document.addEventListener('astro:before-swap', (e) => {
-    var theme = getTheme();
+    var mode = getMode();
+    var theme = effective(mode);
     e.newDocument.documentElement.setAttribute('data-theme', theme);
     var m = e.newDocument.querySelector('meta[name="theme-color"]');
     if (m) m.setAttribute('content', theme === 'dark' ? '#0d1117' : '#ffffff');
   });
   document.addEventListener('astro:after-swap', () => {
-    updateIcons(getTheme());
+    updateIcons(getMode());
   });
 </script>
