@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GitHubIcon from '../../components/GitHubIcon.astro';
 import Tags from '../../components/Tags.astro';
+import KaTeX from '../../components/KaTeX.astro';
+import { containsMath } from '../../lib/math';
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPathsItem } from 'astro';
 
@@ -18,9 +20,16 @@ export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
 const { project } = Astro.props;
 const { title, description, tags, repoUrl, demoUrl, imageUrl } = project.data;
 const { Content } = await render(project);
+const hasMath = containsMath(project.body);
 ---
 
-<BaseLayout title={`${title} - Francesco Bozzo`} description={description}>
+<BaseLayout
+  title={`${title} - Francesco Bozzo`}
+  description={description}
+  ogImage={imageUrl}
+  ogType="article"
+>
+  <KaTeX slot="head" hasMath={hasMath} />
   <article class="project-detail">
     <header class="project-header">
       {imageUrl && (

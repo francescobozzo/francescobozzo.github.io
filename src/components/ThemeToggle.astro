@@ -89,10 +89,16 @@
     }
   }
 
+  function setThemeColor(theme) {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', theme === 'dark' ? '#0d1117' : '#ffffff');
+  }
+
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     updateIcons(theme);
+    setThemeColor(theme);
   }
 
   // Sync icons on load (theme already applied by BaseLayout head script)
@@ -117,6 +123,8 @@
   document.addEventListener('astro:before-swap', (e) => {
     var theme = getTheme();
     e.newDocument.documentElement.setAttribute('data-theme', theme);
+    var m = e.newDocument.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', theme === 'dark' ? '#0d1117' : '#ffffff');
   });
   document.addEventListener('astro:after-swap', () => {
     updateIcons(getTheme());

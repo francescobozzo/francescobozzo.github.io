@@ -4,6 +4,8 @@ import { getCollection, render } from 'astro:content';
 import { readingTime } from '../../lib/readingTime';
 import { formatDate } from '../../lib/formatDate';
 import Tags from '../../components/Tags.astro';
+import KaTeX from '../../components/KaTeX.astro';
+import { containsMath } from '../../lib/math';
 import type { GetStaticPathsItem } from 'astro';
 
 export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
@@ -21,6 +23,7 @@ const { title, description, pubDate, updatedDate, tags } = post.data;
 const { Content } = await render(post);
 
 const minutes = readingTime(post.body);
+const hasMath = containsMath(post.body);
 
 // Prev/Next navigation
 const allPosts = (await getCollection('blog')).sort(
@@ -42,7 +45,13 @@ const jsonLd = JSON.stringify({
 });
 ---
 
-<BaseLayout title={`${title} - Francesco Bozzo`} description={description}>
+<BaseLayout
+  title={`${title} - Francesco Bozzo`}
+  description={description}
+  ogImage={post.data.heroImage?.url}
+  ogType="article"
+>
+  <KaTeX slot="head" hasMath={hasMath} />
   <script type="application/ld+json" set:html={jsonLd} />
   <article class="blog-post">
     <header class="post-header">
@@ -61,6 +70,10 @@ const jsonLd = JSON.stringify({
         )}
       </div>
     </header>
+
+    <div class="reading-progress-wrap">
+      <div id="reading-progress" class="reading-progress" aria-hidden="true"></div>
+    </div>
 
     <div class="post-content">
       <Content />
@@ -88,6 +101,16 @@ const jsonLd = JSON.stringify({
 </BaseLayout>
 
 <style>
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: var(--color-accent);
+    z-index: 200;
+  }
+
   .blog-post {
     max-width: var(--content-max);
   }
@@ -182,3 +205,23 @@ const jsonLd = JSON.stringify({
     text-align: right;
   }
 </style>
+
+<script is:inline>
+  // Reading progress bar. Global-guarded so ClientRouter swaps don't
+  // accumulate duplicate window scroll listeners.
+  (function () {
+    window.__rp = window.__rp || {};
+    if (!window.__rp.scroll) {
+      window.__rp.scroll = function () {
+        var bar = document.getElementById('reading-progress');
+        if (!bar) return;
+        var doc = document.documentElement;
+        var total = doc.scrollHeight - window.innerHeight;
+        var pct = total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0;
+        bar.style.width = pct + '%';
+      };
+      window.addEventListener('scroll', window.__rp.scroll, { passive: true });
+    }
+    window.__rp.scroll();
+  })();
+</script>

@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import '../styles/katex.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -9,9 +8,20 @@ import { ClientRouter } from 'astro:transitions';
 interface Props {
   title: string;
   description?: string;
+  /** Absolute URL or root-relative path used for og:image / twitter:image */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = 'Personal website of Francesco Bozzo' } = Astro.props;
+const {
+  title,
+  description = 'Personal website of Francesco Bozzo',
+  ogImage,
+  ogType = 'website',
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : null;
 ---
 
 <!doctype html>
@@ -23,15 +33,36 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
         var t = localStorage.getItem('theme');
         if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', t);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', t === 'dark' ? '#0d1117' : '#ffffff');
       })();
     </script>
 
     <meta charset="UTF-8" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content="Francesco Bozzo" />
 
     <title>{title}</title>
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Social / Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Francesco Bozzo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && (
+      <>
+        <meta property="og:image" content={ogImageUrl} />
+        <meta name="twitter:image" content={ogImageUrl} />
+      </>
+    )}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -49,6 +80,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
     <slot name="head" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
         <script is:inline>
       (function(){
         // Disable browser's built-in scroll restoration
@@ -86,7 +118,7 @@ const { title, description = 'Personal website of Francesco Bozzo' } = Astro.pro
     </script>
     <div class="page-wrapper">
       <Header currentPath={Astro.url.pathname} />
-      <main class="content">
+      <main id="main-content" class="content">
         <slot />
       </main>
       <Footer />
