@@ -10,8 +10,6 @@ export const GET: APIRoute = async () => {
     description: post.data.description,
     pubDate: post.data.pubDate.toISOString(),
     tags: post.data.tags,
-    // Truncate body to ~500 chars to keep search index small
-    body: post.body.slice(0, 500),
     url: `/blog/${post.id}/`,
   }));
 

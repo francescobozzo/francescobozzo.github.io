@@ -13,11 +13,12 @@
       id="search-input"
       class="search-input"
       placeholder="Search posts..."
+      aria-label="Search posts"
       autocomplete="off"
     />
 
   </div>
-  <div id="search-results" class="search-results"></div>
+  <div id="search-results" class="search-results" role="status" aria-live="polite"></div>
 </div>
 
 <style>
@@ -111,7 +112,7 @@
     const input = document.getElementById('search-input');
     const results = document.getElementById('search-results');
 
-    /** @type {{ id: string; title: string; description: string; pubDate: string; tags: string[]; body: string; url: string }[]} */
+    /** @type {{ id: string; title: string; description: string; pubDate: string; tags: string[]; url: string }[]} */
     let posts = [];
 
     try {
@@ -132,8 +133,7 @@
         const inTitle = post.title.toLowerCase().includes(q);
         const inDesc = post.description.toLowerCase().includes(q);
         const inTags = post.tags.some((t) => t.toLowerCase().includes(q));
-        const inBody = post.body.toLowerCase().includes(q);
-        return inTitle || inDesc || inTags || inBody;
+        return inTitle || inDesc || inTags;
       }).slice(0, 10);
 
       if (matches.length === 0) {
@@ -148,7 +148,7 @@
         const excerpt = post.description;
         return `
           <div class="search-result-item">
-            <a href="${post.url}">
+            <a href="${escapeHtml(post.url)}">
               <div class="search-result-title">${escapeHtml(post.title)}</div>
               <div class="search-result-meta">${date}${post.tags.length ? ' &middot; ' + post.tags.map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join(' ') : ''}</div>
               <div class="search-result-excerpt">${escapeHtml(excerpt)}</div>
