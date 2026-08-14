@@ -77,6 +77,11 @@
 </style>
 
 <script is:inline>
+  // is:inline re-runs on every ClientRouter swap - guard so document-level
+  // listeners don't accumulate (each stacked click handler would cycle the
+  // theme once more per click).
+  if (!window.__themeInit) {
+    window.__themeInit = true;
   function getMode() {
     var t = localStorage.getItem('theme');
     return t === 'light' || t === 'dark' || t === 'auto' ? t : 'auto';
@@ -150,4 +155,5 @@
   document.addEventListener('astro:after-swap', () => {
     updateIcons(getMode());
   });
+  }
 </script>

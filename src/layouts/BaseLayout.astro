@@ -86,6 +86,10 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : null;
     <a class="skip-link" href="#main-content">Skip to content</a>
         <script is:inline>
       (function(){
+        // is:inline re-runs on every ClientRouter swap - guard so window
+        // listeners (scroll/beforeunload/astro:*) don't accumulate.
+        if(window.__scrollSave)return;
+        window.__scrollSave=true;
         // Disable browser's built-in scroll restoration
         history.scrollRestoration='manual';
 

@@ -206,6 +206,12 @@ const navLinks = [
 
 <script is:inline>
   (function () {
+    // is:inline re-runs on every ClientRouter swap - guard so delegated
+    // click/keydown handlers don't accumulate (nav toggle would flip N times
+    // per click after N navigations).
+    if (window.__navInit) return;
+    window.__navInit = true;
+
     var prefetched = new Set();
 
     function getToggle() { return document.querySelector('.nav-toggle'); }
