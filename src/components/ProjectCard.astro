@@ -11,39 +11,54 @@ interface Props {
 const { project } = Astro.props;
 const { title, description, tags, demoUrl, repoUrl, imageUrl } = project.data;
 
-const detailUrl = `/projects/${project.id}`;
+const detailUrl = `/projects/${project.id}/`;
 ---
 
-<a href={detailUrl} class="project-card">
+<div class="project-card">
   {imageUrl && (
     <div class="project-image">
       <img src={imageUrl} alt={title} loading="lazy" />
     </div>
   )}
   <div class="project-body">
-    <h3 class="project-title">{title}</h3>
+    <h3 class="project-title">
+      <a href={detailUrl} class="project-card-link">{title}</a>
+    </h3>
     <p class="project-description">{description}</p>
     <div class="project-meta">
       {tags.length > 0 && <Tags tags={tags} size="md" />}
       <div class="project-links">
         {repoUrl && (
-          <button class="project-link-btn" onclick={`window.open('${repoUrl}', '_blank', 'noopener')`} aria-label="Repository">
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-link-btn"
+            aria-label="Repository"
+          >
             <GitHubIcon size={16} />
-          </button>
+          </a>
         )}
         {demoUrl && (
-          <button class="project-link-btn" onclick={`window.open('${demoUrl}', '_blank', 'noopener')`} aria-label="Live demo">
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-link-btn"
+            aria-label="Live demo"
+          >
             <ExternalLinkIcon size={16} />
-          </button>
+          </a>
         )}
       </div>
     </div>
 
   </div>
-</a>
+</div>
 
 <style>
   .project-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -59,6 +74,20 @@ const detailUrl = `/projects/${project.id}`;
   .project-card:hover {
     border-color: var(--color-card-hover-border);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Stretched-link pattern: title link covers the whole card so every
+     pixel navigates to the detail page. External-link buttons sit above
+     the overlay via z-index. */
+  .project-card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .project-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   .project-image {
@@ -107,18 +136,21 @@ const detailUrl = `/projects/${project.id}`;
   }
 
   .project-link-btn {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 4px;
     background: none;
     border: none;
-    cursor: pointer;
     color: var(--color-text-muted);
+    text-decoration: none;
     transition: color var(--transition-fast);
   }
 
   .project-link-btn:hover {
     color: var(--color-accent);
+    text-decoration: none;
   }
 </style>
