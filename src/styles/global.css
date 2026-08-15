@@ -206,7 +206,11 @@ a:hover {
   text-decoration: underline;
 }
 
-a:visited {
+/* Visited state scoped to content links only - the global rule
+   (specificity 0,1,1) overrode .nav-link/.site-title and turned all
+   visited nav links purple. */
+.post-content a:visited,
+.project-content a:visited {
   color: var(--color-link-visited);
 }
 
