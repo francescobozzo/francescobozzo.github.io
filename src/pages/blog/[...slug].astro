@@ -85,13 +85,13 @@ const jsonLd = JSON.stringify({
 
     <nav class="post-nav">
       {prevPost && (
-        <a href={`/blog/${prevPost.id}`} class="nav-link nav-prev">
+        <a href={`/blog/${prevPost.id}/`} class="nav-link nav-prev">
           <span class="nav-direction">&larr; Newer</span>
           <span class="nav-title">{prevPost.data.title}</span>
         </a>
       )}
       {nextPost && (
-        <a href={`/blog/${nextPost.id}`} class="nav-link nav-next">
+        <a href={`/blog/${nextPost.id}/`} class="nav-link nav-next">
           <span class="nav-direction">Older &rarr;</span>
           <span class="nav-title">{nextPost.data.title}</span>
         </a>

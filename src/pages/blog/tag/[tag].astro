@@ -31,7 +31,7 @@ const { tag, posts }: { tag: string; posts: CollectionEntry<'blog'>[] } = Astro.
 <BaseLayout title={`Tag: ${tag} - Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
   <h1>Tag: <span class="tag-label">{tag}</span></h1>
   <p class="post-count">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
-  <a href="/blog" class="back-link">&larr; All posts</a>
+  <a href="/blog/" class="back-link">&larr; All posts</a>
 
   {posts.length > 0
     ? posts.map((post) => <PostCard post={post} />)

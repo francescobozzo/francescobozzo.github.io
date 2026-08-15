@@ -9,6 +9,9 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   site: 'https://francescobozzo.github.io',
   output: 'static',
+  // Pages build as /path/index.html; all internal links use trailing
+  // slashes to match (avoids 301 redirects on GitHub Pages).
+  trailingSlash: 'always',
   // Mermaid bundles all diagram types into one large chunk (~660KB).
   // It's dynamically imported so only loads on pages with diagrams.
   vite: {

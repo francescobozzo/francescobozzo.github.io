@@ -15,11 +15,11 @@ const posts = (await getCollection('blog'))
       Software engineer at Amazon. Nix, self-hosting, reverse engineering.
     </p>
     <nav class="hero-links">
-      <a href="/about">About</a>
+      <a href="/about/">About</a>
       <span class="sep">&middot;</span>
-      <a href="/blog">Blog</a>
+      <a href="/blog/">Blog</a>
       <span class="sep">&middot;</span>
-      <a href="/projects">Projects</a>
+      <a href="/projects/">Projects</a>
     </nav>
   </section>
 
@@ -29,7 +29,7 @@ const posts = (await getCollection('blog'))
       <ul class="post-list">
         {posts.map((post) => (
           <li class="post-item">
-            <a href={`/blog/${post.id}`}>
+            <a href={`/blog/${post.id}/`}>
               <time datetime={post.data.pubDate.toISOString()}>
                 {formatDateCompact(post.data.pubDate)}
               </time>
@@ -38,7 +38,7 @@ const posts = (await getCollection('blog'))
           </li>
         ))}
       </ul>
-      <a href="/blog" class="view-all">View all posts &rarr;</a>
+      <a href="/blog/" class="view-all">View all posts &rarr;</a>
     </section>
   )}
 </BaseLayout>

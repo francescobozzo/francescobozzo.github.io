@@ -13,7 +13,7 @@ const { tags, link = false, size = 'md' } = Astro.props;
 {link ? (
   <div class="tags tags--link">
     {tags.map((tag) => (
-      <a href={`/blog/tag/${tag}`} class={`tag tag--${size}`}>{tag}</a>
+      <a href={`/blog/tag/${tag}/`} class={`tag tag--${size}`}>{tag}</a>
     ))}
   </div>
 ) : (
