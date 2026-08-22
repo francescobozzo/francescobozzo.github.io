@@ -5,7 +5,7 @@ node_modules/
 dist/
 
 # Resume build output (generated from resume/Francesco_Bozzo_CV.yaml)
-rendercv_output/
+resume/rendercv_output/
 public/resume.pdf
 
 # Env

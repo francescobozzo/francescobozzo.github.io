@@ -37,7 +37,7 @@ jobs:
         shell: 'nix develop -c bash -e {0}'
         run: |
           rendercv render resume/Francesco_Bozzo_CV.yaml
-          cp rendercv_output/Francesco_Bozzo_CV.pdf public/resume.pdf
+          cp resume/rendercv_output/Francesco_Bozzo_CV.pdf public/resume.pdf
 
       - name: Install dependencies
         run: npm ci
