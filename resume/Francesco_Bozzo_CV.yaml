@@ -1,0 +1,245 @@
+cv:
+  name: Francesco Bozzo
+  location: Milan, Italy
+  email: francesco.bozzo.99@gmail.com
+  website:
+  social_networks:
+    - network: LinkedIn
+      username: francesco-bozzo-fb
+    - network: GitHub
+      username: francescobozzo
+  sections:
+    skills:
+      - label: Programming & Markup
+        details: Python, Java, Kotlin, TypeScript, C, Bash, SQL, LaTeX
+      - label: Full Stack Development
+        details: React.js, Next.js, Flask, SQLAlchemy, Alembic
+      - label: Machine Learning & AI
+        details: Jupyter, PyTorch, Numpy, Pandas, Scikit-learn, Matplotlib, NetworkX, Streamlit
+      - label: Technologies & Tools
+        details: AWS, REST API, GraphQL, gRPC, Git, Linux, Docker, Slurm, Arduino, Nix
+      - label: Languages
+        details: English (professional working proficiency), Italian (native)
+    experience:
+      - company: Amazon
+        position: Software Development Engineer II
+        date:
+        start_date: 2025-07
+        end_date: present
+        location: Milan, Italy
+        summary:
+        highlights:
+          - Developing a AWS backend service to plan and route container movements in Amazon Warehouses.
+      - company: Amazon
+        position: Software Development Engineer
+        date:
+        start_date: 2023-04
+        end_date: 2025-06
+        location: Milan, Italy
+        summary:
+        highlights:
+          - Contributing the development of a set of AWS backend tools in Java and Kotlin to maximize the building flow for Inbound Cross Dock warehouses, including process path selection and trailer sequencing.
+          - Developed a Full Stack AWS serverless application to submit and review Amazon Warehouses' station readiness status with around 42000 montly submissions using AWS CDK, Flask, TypeScript, and React.
+      - company: Amazon
+        position: Software Development Engineer Intern
+        date:
+        start_date: 2022-09
+        end_date: 2023-01
+        location: Barcelona, Spain
+        summary:
+        highlights:
+          - Designed and implemented a Full Stack AWS Web Service to simplify the onboarding plan definition of Amazon Warehouse's new hires, impacting 700 employees for 2023 EMEA Warehouse launches.
+      - company: Bruno Kessler Foundation
+        position: Data Scientist
+        date:
+        start_date: 2021-04
+        end_date: 2022-08
+        location: Trento, Italy
+        summary:
+        highlights:
+          - Developed deep learning models to estimate the remaining useful life of gear motors.
+          - Implemented 30x hyper-resolution deep learning techniques for Sentinel-2 satellite images.
+    education:
+      - institution: University of Trento
+        area: Artificial Intelligece Systems
+        degree: MSc
+        date:
+        start_date: 2021-09
+        end_date: 2024-03
+        location: Trento, Italy
+        summary:
+        highlights:
+          - 'Grade: 110/110 with honors. Final dissertation: "Evolving Goals and Plans in Autonomous Software Agents: a LLM-based Approach".'
+      - institution: University of Trento
+        area: Computer Science
+        degree: BS
+        date:
+        start_date: 2018-09
+        end_date: 2021-06
+        location: Trento, Italy
+        summary:
+        highlights:
+          - 'Grade: 110/110 with honors. Final dissertation: "A Structural Analysis of Wikipedia Talk Pages".'
+    projects:
+      - name: '[Distributed Huffman Codec](https://github.com/BigEmperor26/HuffmanCODEC)'
+        date:
+        start_date: 2022-09
+        end_date: 2022-12
+        location:
+        summary:
+        highlights:
+          - Led the design and development of a parallel and cluster-distributed Huffman encoding and decoding tool in C by leveraging OpenMP for multithreading and MPI for multiprocessing.
+          - Analyzed the tool performance against the best online-available open-source alternatives obtaining performance improvements up to 10 times.
+      - name: '[A Deep Learning Approach to Camera Pose Estimation](https://github.com/fedeizzo/camera-pose-estimation)'
+        date:
+        start_date: 2021-10
+        end_date: 2022-01
+        location:
+        summary:
+        highlights:
+          - 'Developed a dataset generation pipeline through structure from motion starting from a video footage.'
+          - Implemented deep learning models for absolute and relative camera pose estimation with mean absolute error of 1.3m on a 700m^2 surface.
+          - Implemented a FastAPI Backend to deploy deep learning models on a Bootstrap Vanilla JS Frontend.
+design:
+  theme: engineeringclassic
+  page:
+    size: us-letter
+    top_margin: 2cm
+    bottom_margin: 2cm
+    left_margin: 2cm
+    right_margin: 2cm
+    show_page_numbering: false
+    show_last_updated_date: true
+  colors:
+    text: rgb(0, 0, 0)
+    name: rgb(0, 79, 144)
+    connections: rgb(0, 79, 144)
+    section_titles: rgb(0, 79, 144)
+    links: rgb(0, 79, 144)
+    last_updated_date_and_page_numbering: rgb(128, 128, 128)
+  text:
+    font_family: Raleway
+    font_size: 10pt
+    leading: 0.6em
+    alignment: justified
+    date_and_location_column_alignment: right
+  links:
+    underline: false
+    use_external_link_icon: false
+  header:
+    name_font_family: Raleway
+    name_font_size: 30pt
+    name_bold: false
+    photo_width: 3.5cm
+    vertical_space_between_name_and_connections: 0.7cm
+    vertical_space_between_connections_and_first_section: 0.7cm
+    horizontal_space_between_connections: 0.5cm
+    connections_font_family: Raleway
+    separator_between_connections: ''
+    use_icons_for_connections: true
+    alignment: left
+  section_titles:
+    type: with-parial-line
+    font_family: Raleway
+    font_size: 1.4em
+    bold: false
+    small_caps: false
+    line_thickness: 0.5pt
+    vertical_space_above: 0.5cm
+    vertical_space_below: 0.3cm
+  entries:
+    date_and_location_width: 4.15cm
+    left_and_right_margin: 0.2cm
+    horizontal_space_between_columns: 0.1cm
+    vertical_space_between_entries: 1.2em
+    allow_page_break_in_sections: true
+    allow_page_break_in_entries: true
+    short_second_row: false
+    show_time_spans_in: []
+  highlights:
+    bullet: •
+    top_margin: 0.25cm
+    left_margin: 0cm
+    vertical_space_between_highlights: 0.25cm
+    horizontal_space_between_bullet_and_highlight: 0.5em
+    summary_left_margin: 0cm
+  entry_types:
+    one_line_entry:
+      template: '**LABEL:** DETAILS'
+    education_entry:
+      main_column_first_row_template: '**INSTITUTION**, AREA -- LOCATION'
+      degree_column_template: '**DEGREE**'
+      degree_column_width: 1cm
+      main_column_second_row_template: |-
+        SUMMARY
+        HIGHLIGHTS
+      date_and_location_column_template: DATE
+    normal_entry:
+      main_column_first_row_template: '**NAME** -- **LOCATION**'
+      main_column_second_row_template: |-
+        SUMMARY
+        HIGHLIGHTS
+      date_and_location_column_template: DATE
+    experience_entry:
+      main_column_first_row_template: '**POSITION**, COMPANY -- LOCATION'
+      main_column_second_row_template: |-
+        SUMMARY
+        HIGHLIGHTS
+      date_and_location_column_template: DATE
+    publication_entry:
+      main_column_first_row_template: '**TITLE**'
+      main_column_second_row_template: |-
+        AUTHORS
+        URL (JOURNAL)
+      main_column_second_row_without_journal_template: |-
+        AUTHORS
+        URL
+      main_column_second_row_without_url_template: |-
+        AUTHORS
+        JOURNAL
+      date_and_location_column_template: DATE
+locale:
+  language: en
+  phone_number_format: national
+  page_numbering_template: NAME - Page PAGE_NUMBER of TOTAL_PAGES
+  last_updated_date_template: Last updated in TODAY
+  date_template: MONTH_ABBREVIATION YEAR
+  month: month
+  months: months
+  year: year
+  years: years
+  present: present
+  to: –
+  abbreviations_for_months:
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - June
+    - July
+    - Aug
+    - Sept
+    - Oct
+    - Nov
+    - Dec
+  full_names_of_months:
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+rendercv_settings:
+  date: '2025-08-31'
+  bold_keywords: []
+  render_command:
+    dont_generate_html: true 
+    dont_generate_markdown: true 
+    dont_generate_png: true 

@@ -27,6 +27,20 @@ jobs:
           node-version: 24
           cache: npm
 
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v14
+
+      - name: Build resume PDF
+        shell: 'nix develop -c bash -e {0}'
+        run: |
+          rendercv render resume/Francesco_Bozzo_CV.yaml
+          cp rendercv_output/Francesco_Bozzo_CV.pdf public/resume.pdf
+
       - name: Install dependencies
         run: npm ci
 

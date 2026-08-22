@@ -15,6 +15,7 @@
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
             nodejs_24
+            rendercv
           ];
 
           # Ensure npm uses the right node
