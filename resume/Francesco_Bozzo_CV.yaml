@@ -104,8 +104,8 @@ design:
   theme: engineeringclassic
   page:
     size: us-letter
-    top_margin: 2cm
-    bottom_margin: 2cm
+    top_margin: 1.5cm
+    bottom_margin: 1.5cm
     left_margin: 2cm
     right_margin: 2cm
     show_footer: false
@@ -145,8 +145,8 @@ design:
   header:
     alignment: left
     photo_width: 3.5cm
-    space_below_name: 0.7cm
-    space_below_connections: 0.7cm
+    space_below_name: 0.4cm
+    space_below_connections: 0.4cm
     connections:
       separator: ''
       show_icons: true
@@ -154,11 +154,11 @@ design:
   section_titles:
     type: with_partial_line
     line_thickness: 0.5pt
-    space_above: 0.5cm
-    space_below: 0.3cm
+    space_above: 0.35cm
+    space_below: 0.2cm
   sections:
     allow_page_break: true
-    space_between_regular_entries: 1.2em
+    space_between_regular_entries: 0.8em
     show_time_spans_in: []
   entries:
     date_and_location_width: 4.15cm
