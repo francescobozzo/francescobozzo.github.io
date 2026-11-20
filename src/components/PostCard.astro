@@ -12,50 +12,89 @@ const { title, description, pubDate, tags } = post.data;
 ---
 
 <article class="post-card">
-  <h2 class="post-title">
-    <a href={`/blog/${post.id}/`}>{title}</a>
-  </h2>
-  <div class="meta">
+  <div class="post-aside eyebrow">
     <time datetime={pubDate.toISOString()}>{formatDate(pubDate, 'short')}</time>
-    <span>&middot;</span>
     <span>{readingTime(post.body)} min read</span>
+  </div>
+  <div>
+    <h2 class="post-title">
+      <a href={`/blog/${post.id}/`}>{title}</a>
+    </h2>
+    <p class="post-excerpt">{description}</p>
     {tags.length > 0 && (
-      <>
-        <span>&middot;</span>
+      <div class="post-tags">
         <Tags tags={tags} link />
-      </>
+      </div>
     )}
   </div>
-  <p class="post-excerpt">{description}</p>
 </article>
 
 <style>
+  /* Date column on the left, content on the right; one hairline per row */
   .post-card {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.5rem 1.5rem;
+    padding-block: 2.25rem;
     border-bottom: 1px solid var(--color-border);
   }
 
-  .post-card:last-of-type {
-    border-bottom: none;
+  .post-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 0.55rem;
   }
 
   .post-title {
-    font-size: 1.3rem;
-    margin: 0 0 0.4em;
+    font-size: clamp(1.45rem, 1.3rem + 0.8vw, 1.8rem);
+    margin: 0;
   }
 
+  /* Stretched link: the title link covers the whole row. Tag links sit
+     above it via z-index. */
   .post-title a {
     color: var(--color-text);
+    transition: color 0.15s;
   }
 
-  .post-title a:hover {
+  .post-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .post-card:hover .post-title a {
     color: var(--color-accent);
+    text-decoration: none;
   }
 
   .post-excerpt {
     color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin: 0.5em 0 0;
+    font-size: 0.95em;
+    line-height: 1.55;
+    margin: 0.6em 0 0;
+    text-wrap: pretty;
+  }
+
+  .post-tags {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .post-card {
+      grid-template-columns: 1fr;
+      padding-block: 1.75rem;
+    }
+
+    .post-aside {
+      flex-direction: row;
+      gap: 1em;
+      padding-top: 0;
+    }
   }
 </style>

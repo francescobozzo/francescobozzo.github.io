@@ -37,7 +37,7 @@ Personal website built with Astro 7. Static site, hosted on GitHub Pages.
    featured: boolean (default: false)
    ```
 
-7. **CSS**: Custom properties in `:root` for theming. Every color is a `light-dark(light, dark)` pair resolved by `color-scheme`; there is no separate dark block. All colors use CSS vars. CSS is inlined into each page (`build.inlineStylesheets: 'always'`).
+7. **CSS**: Custom properties in `:root` for theming (warm paper background, ink text, one rust accent). Typography is serif throughout (Source Serif 4, self-hosted variable font with weight and optical-size axes in `public/fonts/`, latin subset, preloaded in BaseLayout); headings are weight 400 with tight tracking, small labels (`.eyebrow`, `.meta`) are monospace, UI chrome (nav, buttons, tags) is the system sans. Pages open with a `.page-header` (eyebrow, `h1`, optional `.lede`), lists are hairline-separated rows (`PostCard`, `ProjectCard`), no boxed cards. Every color is a `light-dark(light, dark)` pair resolved by `color-scheme`; there is no separate dark block. All colors use CSS vars. CSS is inlined into each page (`build.inlineStylesheets: 'always'`).
 
 8. **Dark mode**: Toggle in Header with three states (`auto` / `light` / `dark`), stored in `localStorage.theme` (default `auto`) and mirrored on `<html data-theme>`, which only sets `color-scheme`. `auto` follows `prefers-color-scheme` with no JS. Applied pre-paint by the inline script in BaseLayout's `<head>`.
 

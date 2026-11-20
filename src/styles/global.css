@@ -1,32 +1,53 @@
 /* ============================================
-   Theme
+   Fonts
+   Source Serif 4 (variable weight + optical size, latin subset),
+   self-hosted in public/fonts. The optical-size axis gives large headings
+   a finer display cut automatically (font-optical-sizing: auto).
+   ============================================ */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-latin-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ============================================
+   Theme: warm paper, ink, one rust accent.
    Every color is a light-dark() pair, resolved by `color-scheme`.
    <html data-theme> is "auto" (follow the OS), "light" or "dark".
    ============================================ */
 :root {
   color-scheme: light dark;
 
-  --color-bg: light-dark(#ffffff, #0d1117);
-  --color-bg-secondary: light-dark(#f6f8fa, #161b22);
-  --color-text: light-dark(#24292f, #c9d1d9);
-  --color-text-secondary: light-dark(#57606a, #8b949e);
-  --color-text-muted: light-dark(#656d76, #7c8590);
-  --color-border: light-dark(#d0d7de, #30363d);
-  --color-accent: light-dark(#0969da, #58a6ff);
-  --color-accent-hover: light-dark(#0550ae, #79c0ff);
-  --color-link-visited: light-dark(#8250df, #bc8cff);
-  --color-card-bg: light-dark(#ffffff, #161b22);
-  --color-tag-bg: light-dark(#f0f4f8, #1c3144);
-  --color-toggle-bg: light-dark(#e1e4e8, #30363d);
-  --color-selection-bg: light-dark(#b3d9ff, #484f58);
+  --color-bg: light-dark(#f6f3ec, #161513);
+  --color-bg-secondary: light-dark(#ece8de, #201e1b);
+  --color-text: light-dark(#1c1a17, #e9e4d9);
+  --color-text-secondary: light-dark(#4a463f, #bdb7aa);
+  --color-text-muted: light-dark(#6b665c, #989284);
+  --color-border: light-dark(#dcd7ca, #302d28);
+  --color-border-strong: light-dark(#bfb9a9, #4a463e);
+  --color-accent: light-dark(#a63d1a, #e8936c);
+  --color-accent-hover: light-dark(#7f2d11, #f2b092);
+  --color-selection-bg: light-dark(#ecd3c4, #5a3424);
 
-  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  --font-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+  --font-serif: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 
-  --content-max: 49rem;
-  --page-padding: 2rem;
-  --header-height: 3.5rem;
+  --content-max: 46rem;
+  --page-padding: 1.5rem;
+  --header-height: 3.75rem;
 }
 
 [data-theme='light'] { color-scheme: light; }
@@ -57,8 +78,9 @@ html {
 
 body {
   font-family: var(--font-serif);
-  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-  line-height: 1.7;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.65;
+  background: var(--color-bg);
   color: var(--color-text);
   min-height: 100dvh;
   display: flex;
@@ -77,7 +99,7 @@ body {
 
 main {
   flex: 1;
-  padding-block: var(--page-padding);
+  padding-block: clamp(3rem, 2rem + 5vw, 5.5rem) 5rem;
 }
 
 .skip-link {
@@ -88,9 +110,9 @@ main {
   padding: 0.5em 0.9em;
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-radius: 4px;
 }
 
 .skip-link:focus {
@@ -111,17 +133,19 @@ main {
    Typography
    ============================================ */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  line-height: 1.3;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
   margin-top: 2em;
   margin-bottom: 0.5em;
 }
 
-h1 { font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem); margin-top: 0; }
-h2 { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.85rem); }
-h3 { font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem); }
-h4 { font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); }
+h1 { font-size: clamp(2.25rem, 1.6rem + 3.2vw, 3.5rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 360; margin-top: 0; }
+h2 { font-size: clamp(1.5rem, 1.3rem + 1vw, 1.9rem); }
+h3 { font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.4rem); }
+h4 { font-size: 1.05em; font-weight: 600; letter-spacing: 0; }
 
 p {
   margin-bottom: 1.25em;
@@ -130,15 +154,17 @@ p {
 a {
   color: var(--color-accent);
   text-decoration: none;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
 }
 
 a:hover {
   color: var(--color-accent-hover);
-  text-decoration: underline;
+  text-decoration-line: underline;
 }
 
 strong {
-  font-weight: 600;
+  font-weight: 550;
 }
 
 ul, ol {
@@ -163,8 +189,8 @@ hr {
 }
 
 blockquote {
-  border-left: 3px solid var(--color-accent);
-  padding-left: 1em;
+  border-left: 1px solid var(--color-border-strong);
+  padding-left: 1.25em;
   margin: 1.5em 0;
   color: var(--color-text-secondary);
   font-style: italic;
@@ -182,38 +208,69 @@ table {
 }
 
 th, td {
-  padding: 0.5em 0.75em;
-  border: 1px solid var(--color-border);
+  padding: 0.5em 1em 0.5em 0;
+  border-bottom: 1px solid var(--color-border);
   text-align: left;
 }
 
 th {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  background: var(--color-bg-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  border-bottom-color: var(--color-border-strong);
 }
 
 /* ============================================
    Small shared pieces
    ============================================ */
+/* Small monospace label: dates, kickers, counts */
+.eyebrow,
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
+}
+
 .meta {
   display: flex;
   align-items: center;
-  gap: 0.3em;
+  gap: 0.5em;
   flex-wrap: wrap;
+}
+
+/* Page opener: kicker, big serif title, optional lede, hairline below */
+.page-header {
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-header .eyebrow {
+  margin-bottom: 1.25rem;
+}
+
+.page-header h1 {
+  margin-bottom: 0;
+}
+
+.lede {
+  margin: 1.5rem 0 0;
+  font-size: 1.2em;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  text-wrap: pretty;
+}
+
+/* Quiet text link with an arrow, e.g. "All posts ->" */
+.more-link {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 .empty-state {
   color: var(--color-text-muted);
   font-style: italic;
-}
-
-.back-link {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
 }
 
 /* Outlined button-style link (resume download, project links) */
@@ -224,13 +281,15 @@ th {
   font-family: var(--font-sans);
   font-size: 0.85rem;
   font-weight: 500;
-  padding: 0.3em 0.7em;
-  border: 1px solid var(--color-accent);
+  padding: 0.45em 0.9em;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
   border-radius: 6px;
 }
 
 .button-link:hover {
-  background: var(--color-accent);
+  background: var(--color-text);
+  border-color: var(--color-text);
   color: var(--color-bg);
   text-decoration: none;
 }
@@ -244,19 +303,18 @@ th {
 
 /* Persistent underline so links don't rely on color alone (WCAG 2.1 AA) */
 .prose a {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration-line: underline;
 }
 
-.prose a:visited {
-  color: var(--color-link-visited);
+.prose p,
+.prose li {
+  text-wrap: pretty;
 }
 
 :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.15em 0.35em;
 }
@@ -264,9 +322,11 @@ th {
 /* Code blocks (Shiki, dual theme via --shiki-light / --shiki-dark) */
 .astro-code {
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: 0.8em;
+  line-height: 1.6;
   margin: 1.5em 0;
   padding: 1em 1.25em;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   background: var(--color-bg-secondary);
   counter-reset: code-line;
@@ -310,16 +370,17 @@ th {
    ============================================ */
 @media (max-width: 640px) {
   :root {
-    --page-padding: 1.25rem;
+    --page-padding: 1.125rem;
   }
 
-  h1, h2, h3 {
+  h2, h3 {
     margin-top: 1.5em;
   }
 
   /* Full-bleed code blocks */
   .astro-code {
     margin-inline: calc(var(--page-padding) * -1);
+    border-inline: none;
     border-radius: 0;
   }
 }

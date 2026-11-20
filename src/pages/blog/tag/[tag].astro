@@ -17,23 +17,21 @@ const { posts } = Astro.props;
 ---
 
 <BaseLayout title={`Tag: ${tag} - Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
-  <h1>Tag: <span class="tag-label">{tag}</span></h1>
-  <p class="meta">
-    {posts.length} {posts.length === 1 ? 'post' : 'posts'}
-    <span>&middot;</span>
-    <a href="/blog/">&larr; All posts</a>
-  </p>
+  <header class="page-header">
+    <p class="eyebrow"><a href="/blog/">Blog</a> / Tag</p>
+    <h1>{tag}</h1>
+    <p class="meta">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+  </header>
 
   {posts.map((post) => <PostCard post={post} />)}
 </BaseLayout>
 
 <style>
-  .tag-label {
-    color: var(--color-accent);
+  .eyebrow a {
+    color: inherit;
   }
 
   .meta {
-    font-size: 0.875rem;
-    margin-bottom: 2rem;
+    margin: 1.5rem 0 0;
   }
 </style>

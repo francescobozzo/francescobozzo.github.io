@@ -13,7 +13,7 @@ const navLinks = [
 
 <header class="site-header">
   <div class="header-inner wrap">
-    <a href="/" class="site-title">francesco.bozzo</a>
+    <a href="/" class="site-title">Francesco Bozzo</a>
     <nav class="nav-links" aria-label="Main">
       {navLinks.map(({ href, label }) => (
         <a
@@ -35,7 +35,9 @@ const navLinks = [
     top: 0;
     z-index: 100;
     height: var(--header-height);
-    background: var(--color-bg);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-border);
     font-family: var(--font-sans);
   }
@@ -44,12 +46,12 @@ const navLinks = [
     height: 100%;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .site-title {
-    font-weight: 700;
-    font-size: 1.1rem;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
     letter-spacing: -0.02em;
     color: var(--color-text);
     /* On very narrow screens the title gives way before the nav does */
@@ -66,33 +68,29 @@ const navLinks = [
 
   .nav-link {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    padding: 0.35em 0.6em;
+    color: var(--color-text-muted);
+    padding: 0.5em 0.65em;
     white-space: nowrap;
   }
 
   .site-title:hover,
-  .nav-link:hover {
+  .nav-link:hover,
+  .nav-link[aria-current] {
     color: var(--color-text);
     text-decoration: none;
   }
 
-  .nav-link[aria-current] {
-    color: var(--color-accent);
-  }
-
   @media (max-width: 640px) {
     .header-inner {
-      gap: 0.25rem;
+      gap: 0.125rem;
     }
 
     .site-title {
-      font-size: 1rem;
+      font-size: 1.15rem;
     }
 
     .nav-link {
-      padding: 0.6em 0.3em;
+      padding: 0.6em 0.4em;
     }
   }
 </style>

@@ -1,8 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import GitHubIcon from '../../components/GitHubIcon.astro';
-import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
 import Tags from '../../components/Tags.astro';
 
 export async function getStaticPaths() {
@@ -26,76 +24,78 @@ const { Content } = await render(project);
   math={project.body?.includes('$')}
 >
   <article>
-    <header class="project-header">
-      {imageUrl && <img class="project-image" src={imageUrl} alt="" />}
+    <header class="page-header project-header">
+      <p class="eyebrow"><a href="/projects/">Projects</a></p>
       <h1>{title}</h1>
-      <p class="project-description">{description}</p>
+      <p class="lede">{description}</p>
       <div class="project-meta">
         <Tags tags={tags} />
-        <div class="project-links">
-          {repoUrl && (
-            <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="button-link">
-              <GitHubIcon />
-              Repository
-            </a>
-          )}
-          {demoUrl && (
-            <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="button-link">
-              <ExternalLinkIcon />
-              Live Demo
-            </a>
-          )}
+        <div class="project-links eyebrow">
+          {repoUrl && <a href={repoUrl} target="_blank" rel="noopener noreferrer">Source &nearr;</a>}
+          {demoUrl && <a href={demoUrl} target="_blank" rel="noopener noreferrer">Demo &nearr;</a>}
         </div>
       </div>
     </header>
+
+    {imageUrl && <img class="project-image" src={imageUrl} alt="" />}
 
     <div class="prose">
       <Content />
     </div>
 
     <nav class="project-nav">
-      <a href="/projects/" class="back-link">&larr; All Projects</a>
+      <a href="/projects/" class="more-link">&larr; All projects</a>
     </nav>
   </article>
 </BaseLayout>
 
 <style>
   .project-header {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .project-header h1 {
-    margin-bottom: 0.3em;
+    font-size: clamp(2rem, 1.5rem + 2.6vw, 3.1rem);
+  }
+
+  .eyebrow a {
+    color: inherit;
   }
 
   .project-image {
     width: 100%;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-  }
-
-  .project-description {
-    font-size: 1.05rem;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 0.75em;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
   }
 
   .project-meta {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: 1rem;
     flex-wrap: wrap;
+    margin-top: 1.5rem;
   }
 
   .project-links {
     display: flex;
-    gap: 0.75rem;
+    gap: 1.25rem;
+    margin-left: auto;
+  }
+
+  .project-links a {
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .project-links a:hover {
+    color: var(--color-accent);
+    text-decoration: none;
   }
 
   .project-nav {
-    margin-top: 3rem;
+    margin-top: 4rem;
     padding-top: 2rem;
     border-top: 1px solid var(--color-border);
   }

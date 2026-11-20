@@ -14,12 +14,12 @@
 - [x] Fix KaTeX renderer/stylesheet version mismatch (sub/superscripts rendered full-size); self-host KaTeX CSS
 - [x] Fix swapped Older/Newer post links, tag hover style, missing `ExternalLinkIcon` import on project pages, broken mobile table layout, anchors hidden under the header
 - [x] `twitter:card`: `summary` when there is no og:image
+- [x] Redesign: warm paper + rust accent palette, self-hosted Source Serif 4, serif headings, monospace labels, hairline-separated post/project rows instead of cards
 
 ## Remaining
 
 - [ ] Sidenotes (Tufte-style, CSS-only)
 - [ ] Analytics (privacy-friendly, e.g., Umami)
-- [ ] Custom fonts (currently system fonts)
 - [ ] OG images per post
 - [ ] Newsletter signup
 - [ ] Related posts by tags

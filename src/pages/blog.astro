@@ -8,7 +8,9 @@ const posts = await getPosts();
 ---
 
 <BaseLayout title="Blog - Francesco Bozzo" description="Blog posts by Francesco Bozzo">
-  <h1>Blog</h1>
+  <header class="page-header">
+    <h1>Blog</h1>
+  </header>
 
   {posts.length > 0 ? (
     <>

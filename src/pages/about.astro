@@ -6,8 +6,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   title="About - Francesco Bozzo"
   description="Learn more about Francesco Bozzo"
 >
-  <h1>About</h1>
+  <header class="page-header">
+    <h1>About</h1>
+  </header>
 
+  <div class="prose about">
   <p>
     I'm Francesco Bozzo, a Software Development Engineer II at Amazon in
     Milan, Italy. I work in the Fulfillment Technologies organization
@@ -40,6 +43,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     support fan translation projects.
   </p>
 
+  </div>
+
   <p class="cv-download">
     <a href="/resume.pdf" target="_blank" class="button-link" data-astro-prefetch="false">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
@@ -49,8 +54,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </BaseLayout>
 
 <style>
+  .about {
+    margin-top: 2.5rem;
+  }
+
   .cv-download {
-    text-align: center;
-    margin: 1.5em 0;
+    margin: 2.5rem 0 0;
   }
 </style>

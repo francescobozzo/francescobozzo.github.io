@@ -10,22 +10,15 @@ const projects = (await getCollection('projects')).sort(
 ---
 
 <BaseLayout title="Projects - Francesco Bozzo" description="Projects by Francesco Bozzo">
-  <h1>Projects</h1>
+  <header class="page-header">
+    <h1>Projects</h1>
+  </header>
 
   {projects.length > 0 ? (
-    <div class="project-grid">
+    <div>
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   ) : (
     <p class="empty-state">No projects yet. Coming soon!</p>
   )}
 </BaseLayout>
-
-<style>
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-</style>
