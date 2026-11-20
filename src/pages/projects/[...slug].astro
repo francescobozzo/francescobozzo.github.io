@@ -1,26 +1,21 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GitHubIcon from '../../components/GitHubIcon.astro';
+import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
 import Tags from '../../components/Tags.astro';
-import KaTeX from '../../components/KaTeX.astro';
-import { containsMath } from '../../lib/math';
-import { getCollection, render } from 'astro:content';
-import type { GetStaticPathsItem } from 'astro';
 
-export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
-  const projects = getCollection('projects');
-  return projects.then((projects) =>
-    projects.map((project) => ({
-      params: { slug: project.id },
-      props: { project },
-    })),
-  );
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
 }
 
 const { project } = Astro.props;
 const { title, description, tags, repoUrl, demoUrl, imageUrl } = project.data;
 const { Content } = await render(project);
-const hasMath = containsMath(project.body);
 ---
 
 <BaseLayout
@@ -28,37 +23,33 @@ const hasMath = containsMath(project.body);
   description={description}
   ogImage={imageUrl}
   ogType="article"
+  math={project.body?.includes('$')}
 >
-  <KaTeX slot="head" hasMath={hasMath} />
-  <article class="project-detail">
+  <article>
     <header class="project-header">
-      {imageUrl && (
-        <div class="project-image">
-          <img src={imageUrl} alt={title} loading="lazy" />
-        </div>
-      )}
+      {imageUrl && <img class="project-image" src={imageUrl} alt="" />}
       <h1>{title}</h1>
       <p class="project-description">{description}</p>
       <div class="project-meta">
-        {tags.length > 0 && <Tags tags={tags} size="md" />}
+        <Tags tags={tags} />
         <div class="project-links">
           {repoUrl && (
-            <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="project-link">
-              <GitHubIcon size={16} />
-              <span>Repository</span>
+            <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="button-link">
+              <GitHubIcon />
+              Repository
             </a>
           )}
           {demoUrl && (
-            <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="project-link">
-              <ExternalLinkIcon size={16} />
-              <span>Live Demo</span>
+            <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="button-link">
+              <ExternalLinkIcon />
+              Live Demo
             </a>
           )}
         </div>
       </div>
     </header>
 
-    <div class="project-content">
+    <div class="prose">
       <Content />
     </div>
 
@@ -69,27 +60,17 @@ const hasMath = containsMath(project.body);
 </BaseLayout>
 
 <style>
-  .project-detail {
-    max-width: var(--content-max);
-  }
-
   .project-header {
     margin-bottom: 2rem;
   }
 
   .project-header h1 {
-    margin-top: 0;
     margin-bottom: 0.3em;
   }
 
   .project-image {
     width: 100%;
     margin-bottom: 1.5rem;
-  }
-
-  .project-image img {
-    width: 100%;
-    height: auto;
     border-radius: 8px;
   }
 
@@ -103,9 +84,9 @@ const hasMath = containsMath(project.body);
   .project-meta {
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 0.75rem;
     flex-wrap: wrap;
-    justify-content: space-between;
   }
 
   .project-links {
@@ -113,62 +94,9 @@ const hasMath = containsMath(project.body);
     gap: 0.75rem;
   }
 
-  .project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    color: var(--color-accent);
-    text-decoration: none;
-    padding: 0.25em 0.6em;
-    border: 1px solid var(--color-accent);
-    border-radius: 6px;
-    transition: background var(--transition-fast), color var(--transition-fast);
-  }
-
-  .project-link:hover {
-    background: var(--color-accent);
-    color: #ffffff;
-    text-decoration: none;
-  }
-
-  .project-content {
-    margin-bottom: 2rem;
-  }
-
-  .project-content h2,
-  .project-content h3,
-  .project-content h4 {
-    margin-top: 2em;
-  }
-
-  .project-content p {
-    margin-bottom: 1.25em;
-  }
-
-  .project-content table {
-    font-size: 0.9em;
-  }
-
-  .project-content table th {
-    font-family: var(--font-sans);
-  }
-
   .project-nav {
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 1px solid var(--color-border);
-  }
-
-  .back-link {
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  .back-link:hover {
-    text-decoration: underline;
   }
 </style>

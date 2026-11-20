@@ -12,8 +12,12 @@ export default defineConfig({
   // Pages build as /path/index.html; all internal links use trailing
   // slashes to match (avoids 301 redirects on GitHub Pages).
   trailingSlash: 'always',
-  // Mermaid bundles all diagram types into one large chunk (~660KB).
-  // It's dynamically imported so only loads on pages with diagrams.
+  // Plain multi-page site: every page is one self-contained HTML response
+  // (CSS inlined), and links are prefetched as they scroll into view.
+  build: { inlineStylesheets: 'always' },
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  // Mermaid ships one large chunk (~660KB). It only loads on pages that
+  // render a <Mermaid /> diagram.
   vite: {
     build: {
       chunkSizeWarningLimit: 700,
@@ -29,7 +33,7 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
-      // No inline default styles - CSS handles both themes via --shiki-* vars
+      // No inline colors - global.css picks --shiki-light / --shiki-dark
       defaultColor: false,
     },
   },

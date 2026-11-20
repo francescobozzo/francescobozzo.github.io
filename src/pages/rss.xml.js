@@ -1,25 +1,20 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getPosts } from '../lib/posts';
 
 /** @param {import('astro').APIContext} context */
 export async function GET(context) {
-  const blog = await getCollection('blog');
-
-  const posts = blog
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .map((post) => ({
-      title: post.data.title,
-      pubDate: post.data.pubDate,
-      updatedDate: post.data.updatedDate,
-      description: post.data.description,
-      link: `/blog/${post.id}/`,
-    }));
+  const posts = await getPosts();
 
   return rss({
     title: 'Francesco Bozzo - Blog',
     description: 'Thoughts on software, math, and everything in between.',
     site: context.site,
-    items: posts,
+    items: posts.map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate,
+      link: `/blog/${post.id}/`,
+    })),
     customData: `<language>en-us</language>`,
   });
 }

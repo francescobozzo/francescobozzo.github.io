@@ -1,70 +1,39 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
-import { getCollection } from 'astro:content';
-import type { CollectionEntry, GetStaticPathsItem } from 'astro';
+import { getPosts } from '../../../lib/posts';
 
-export function getStaticPaths(): Promise<GetStaticPathsItem[]> {
-  const posts = getCollection('blog');
-  return posts.then((posts) => {
-    const tagMap = new Map<string, typeof posts>();
-    posts.forEach((post) => {
-      post.data.tags.forEach((tag) => {
-        const existing = tagMap.get(tag);
-        if (existing) {
-          existing.push(post);
-        } else {
-          tagMap.set(tag, [post]);
-        }
-      });
-    });
-    return Array.from(tagMap.entries()).map(([tag, taggedPosts]) => ({
-      params: { tag },
-      props: { tag, posts: taggedPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()) },
-    }));
-  });
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
 }
 
-const { tag, posts }: { tag: string; posts: CollectionEntry<'blog'>[] } = Astro.props;
+const { tag } = Astro.params;
+const { posts } = Astro.props;
 ---
 
 <BaseLayout title={`Tag: ${tag} - Francesco Bozzo`} description={`Blog posts tagged with "${tag}"`}>
   <h1>Tag: <span class="tag-label">{tag}</span></h1>
-  <p class="post-count">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
-  <a href="/blog/" class="back-link">&larr; All posts</a>
+  <p class="meta">
+    {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    <span>&middot;</span>
+    <a href="/blog/">&larr; All posts</a>
+  </p>
 
-  {posts.length > 0
-    ? posts.map((post) => <PostCard post={post} />)
-    : <p class="empty-state">No posts with this tag yet.</p>}
+  {posts.map((post) => <PostCard post={post} />)}
 </BaseLayout>
 
 <style>
-  .empty-state {
-    color: var(--color-text-muted);
-    font-style: italic;
-  }
-
   .tag-label {
     color: var(--color-accent);
   }
 
-  .post-count {
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .back-link {
-    display: inline-block;
-    font-family: var(--font-sans);
+  .meta {
     font-size: 0.875rem;
-    color: var(--color-accent);
-    text-decoration: none;
     margin-bottom: 2rem;
-  }
-
-  .back-link:hover {
-    text-decoration: underline;
   }
 </style>

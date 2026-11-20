@@ -2,30 +2,20 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import Search from '../components/Search.astro';
-import { getCollection } from 'astro:content';
+import { getPosts } from '../lib/posts';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getPosts();
 ---
 
 <BaseLayout title="Blog - Francesco Bozzo" description="Blog posts by Francesco Bozzo">
   <h1>Blog</h1>
-  <Search />
 
-  {posts.length > 0
-    ? posts.map((post) => <PostCard post={post} />)
-    : <p class="empty-state">No posts yet. Stay tuned!</p>}
+  {posts.length > 0 ? (
+    <>
+      <Search />
+      {posts.map((post) => <PostCard post={post} />)}
+    </>
+  ) : (
+    <p class="empty-state">No posts yet. Stay tuned!</p>
+  )}
 </BaseLayout>
-
-<style>
-  .empty-state {
-    color: var(--color-text-muted);
-    font-style: italic;
-  }
-
-  p:first-of-type {
-    color: var(--color-text-secondary);
-    margin-bottom: 2rem;
-  }
-</style>

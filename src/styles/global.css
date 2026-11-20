@@ -1,82 +1,39 @@
 /* ============================================
-   CSS Custom Properties - Light / Dark
+   Theme
+   Every color is a light-dark() pair, resolved by `color-scheme`.
+   <html data-theme> is "auto" (follow the OS), "light" or "dark".
    ============================================ */
 :root {
-  /* Colors - Light (default) */
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-text: #24292f;
-  --color-text-secondary: #57606a;
-  --color-text-muted: #656d76;
-  --color-border: #d0d7de;
-  --color-accent: #0969da;
-  --color-accent-hover: #0550ae;
-  --color-link: #0969da;
-  --color-link-visited: #8250df;
-  --color-code-bg: #f6f8fa;
-  --color-code-border: #d0d7de;
-  --color-card-bg: #ffffff;
-  --color-card-border: #d0d7de;
-  --color-card-hover-border: #0969da;
-  --color-header-bg: #ffffff;
-  --color-tag-bg: #f0f4f8;
-  --color-tag-text: #0969da;
-  --color-toggle-bg: #e1e4e8;
-  --color-toggle-icon: #24292f;
+  color-scheme: light dark;
 
-  /* Selection */
-  --color-selection-bg: #b3d9ff;
-  --color-selection-text: #24292f;
+  --color-bg: light-dark(#ffffff, #0d1117);
+  --color-bg-secondary: light-dark(#f6f8fa, #161b22);
+  --color-text: light-dark(#24292f, #c9d1d9);
+  --color-text-secondary: light-dark(#57606a, #8b949e);
+  --color-text-muted: light-dark(#656d76, #7c8590);
+  --color-border: light-dark(#d0d7de, #30363d);
+  --color-accent: light-dark(#0969da, #58a6ff);
+  --color-accent-hover: light-dark(#0550ae, #79c0ff);
+  --color-link-visited: light-dark(#8250df, #bc8cff);
+  --color-card-bg: light-dark(#ffffff, #161b22);
+  --color-tag-bg: light-dark(#f0f4f8, #1c3144);
+  --color-toggle-bg: light-dark(#e1e4e8, #30363d);
+  --color-selection-bg: light-dark(#b3d9ff, #484f58);
 
-  /* Typography */
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   --font-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
 
-  /* Sizes */
-  --content-max: 85ch;
-  --header-max: calc(var(--content-max) + 6ch);
+  --content-max: 49rem;
   --page-padding: 2rem;
   --header-height: 3.5rem;
-
-  /* Transitions */
-  --transition-fast: 50ms ease;
-  --transition-normal: 80ms ease;
-
-  /* Code blocks (Shiki) */
-  --astro-code-font-family: var(--font-mono);
 }
 
-/* Dark mode */
-[data-theme='dark'] {
-  --color-bg: #0d1117;
-  --color-bg-secondary: #161b22;
-  --color-text: #c9d1d9;
-  --color-text-secondary: #8b949e;
-  --color-text-muted: #7c8590;
-  --color-border: #30363d;
-  --color-accent: #58a6ff;
-  --color-accent-hover: #79c0ff;
-  --color-link: #58a6ff;
-  --color-link-visited: #bc8cff;
-  --color-code-bg: #161b22;
-  --color-code-border: #30363d;
-  --color-card-bg: #161b22;
-  --color-card-border: #30363d;
-  --color-card-hover-border: #58a6ff;
-  --color-header-bg: #0d1117;
-  --color-tag-bg: #1c3144;
-  --color-tag-text: #58a6ff;
-  --color-toggle-bg: #30363d;
-  --color-toggle-icon: #c9d1d9;
-
-  /* Selection */
-  --color-selection-bg: #484f58;
-  --color-selection-text: #c9d1d9;
-}
+[data-theme='light'] { color-scheme: light; }
+[data-theme='dark'] { color-scheme: dark; }
 
 /* ============================================
-   Reset & Base
+   Reset & base
    ============================================ */
 *,
 *::before,
@@ -86,12 +43,16 @@
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
-  background-color: var(--color-bg);
-  min-height: 100dvh;
-  transition: background-color 0.2s ease;
-  overflow-y: scroll; /* Firefox: reserve scrollbar space, prevent layout shift */
+  background: var(--color-bg);
+  scrollbar-gutter: stable;
+  /* Keep anchored headings clear of the sticky header */
+  scroll-padding-top: calc(var(--header-height) + 1rem);
 }
 
 body {
@@ -99,18 +60,26 @@ body {
   font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   line-height: 1.7;
   color: var(--color-text);
-  background: transparent;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  transition: color 0.2s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ============================================
-   Skip link (accessibility)
-   ============================================ */
+/* Shared page column: header, main and footer all line up on it */
+.wrap {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+}
+
+main {
+  flex: 1;
+  padding-block: var(--page-padding);
+}
+
 .skip-link {
   position: fixed;
   top: -100%;
@@ -119,59 +88,23 @@ body {
   padding: 0.5em 0.9em;
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-accent);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  text-decoration: none;
 }
 
 .skip-link:focus {
   top: 0.75rem;
-  color: var(--color-accent);
-  text-decoration: none;
+}
+
+:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* ============================================
-   Layout
-   ============================================ */
-.page-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.content {
-  flex: 1;
-  width: 100%;
-  max-width: var(--content-max);
-  margin: 0 auto;
-  padding: calc(var(--header-height) + var(--page-padding)) var(--page-padding) var(--page-padding);
-}
-
-/* Smooth theme transitions on all colored elements */
-.site-header,
-.nav-links,
-.tag,
-.cv-entry,
-.project-card,
-.search-input {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Site header background */
-.site-header {
-  background: var(--color-header-bg);
-}
-
-/* Mobile nav panel background - only when fixed/fullscreen */
-@media (max-width: 640px) {
-  .nav-links {
-    background: var(--color-header-bg);
-  }
+::selection {
+  background: var(--color-selection-bg);
+  color: var(--color-text);
 }
 
 /* ============================================
@@ -181,7 +114,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
   font-weight: 600;
   line-height: 1.3;
-  color: var(--color-text);
   margin-top: 2em;
   margin-bottom: 0.5em;
 }
@@ -196,9 +128,8 @@ p {
 }
 
 a {
-  color: var(--color-link);
+  color: var(--color-accent);
   text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
 a:hover {
@@ -206,106 +137,10 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Visited state scoped to content links only - the global rule
-   (specificity 0,1,1) overrode .nav-link/.site-title and turned all
-   visited nav links purple. */
-.post-content a:visited,
-.project-content a:visited {
-  color: var(--color-link-visited);
-}
-
-/* Content links: persistent underline so they don't rely on color alone (WCAG 2.1 AA) */
-.post-content a,
-.project-content a {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-}
-
 strong {
   font-weight: 600;
 }
 
-em {
-  font-style: italic;
-}
-
-/* ============================================
-   Inline code
-   ============================================ */
-:not(pre) > code {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-  background: var(--color-code-bg);
-  border: 1px solid var(--color-code-border);
-  border-radius: 4px;
-  padding: 0.15em 0.35em;
-}
-
-/* ============================================
-   Code blocks (Shiki)
-   ============================================ */
-.astro-code {
-  border-radius: 6px !important;
-  margin: 1.5em 0 !important;
-  font-size: 0.85em !important;
-  padding: 1em 1.25em !important;
-  transition: background-color 0.2s ease;
-  counter-reset: code-line;
-}
-
-.astro-code code {
-  display: block;
-}
-
-.astro-code .line {
-  counter-increment: code-line;
-  position: relative;
-  padding-left: 5ch !important;
-}
-
-.astro-code .line::before {
-  content: counter(code-line);
-  position: absolute;
-  left: 0;
-  width: 2ch;
-  text-align: right;
-  color: var(--color-text-muted);
-  opacity: 0.35;
-  font-family: var(--font-mono);
-  pointer-events: none;
-}
-
-/* Shiki: span colors use CSS vars for syntax highlighting */
-.astro-code {
-  background-color: var(--color-code-bg);
-  color: var(--shiki-light);
-}
-.astro-code span {
-  color: var(--shiki-light);
-}
-[data-theme='dark'] .astro-code {
-  background-color: var(--color-code-bg);
-  color: var(--shiki-dark);
-}
-[data-theme='dark'] .astro-code span {
-  color: var(--shiki-dark);
-  font-style: var(--shiki-dark-font-style);
-  font-weight: var(--shiki-dark-font-weight);
-  text-decoration: var(--shiki-dark-text-decoration);
-}
-
-/* ============================================
-   Images
-   ============================================ */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ============================================
-   Lists
-   ============================================ */
 ul, ol {
   margin-bottom: 1.25em;
   padding-left: 1.5em;
@@ -315,18 +150,18 @@ li {
   margin-bottom: 0.25em;
 }
 
-/* ============================================
-   Horizontal rule
-   ============================================ */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: 2em 0;
 }
 
-/* ============================================
-   Blockquote
-   ============================================ */
 blockquote {
   border-left: 3px solid var(--color-accent);
   padding-left: 1em;
@@ -335,11 +170,12 @@ blockquote {
   font-style: italic;
 }
 
-/* ============================================
-   Tables
-   ============================================ */
+/* Tables scroll sideways instead of overflowing the page */
 table {
-  width: 100%;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   margin: 1.5em 0;
   font-size: 0.9em;
@@ -352,40 +188,121 @@ th, td {
 }
 
 th {
-  background: var(--color-bg-secondary);
+  font-family: var(--font-sans);
   font-weight: 600;
+  background: var(--color-bg-secondary);
 }
 
 /* ============================================
-   Focus styles
+   Small shared pieces
    ============================================ */
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  flex-wrap: wrap;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.empty-state {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.back-link {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+/* Outlined button-style link (resume download, project links) */
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+}
+
+.button-link:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  text-decoration: none;
 }
 
 /* ============================================
-   Selection
+   Prose: rendered markdown (blog posts, project pages)
    ============================================ */
-::selection {
-  background: var(--color-selection-bg);
-  color: var(--color-selection-text);
+.prose {
+  margin-bottom: 2rem;
 }
 
-/* ============================================
-   Reduced motion
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  html {
-    scroll-behavior: auto;
-  }
+/* Persistent underline so links don't rely on color alone (WCAG 2.1 AA) */
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.prose a:visited {
+  color: var(--color-link-visited);
+}
+
+:not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.15em 0.35em;
+}
+
+/* Code blocks (Shiki, dual theme via --shiki-light / --shiki-dark) */
+.astro-code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  margin: 1.5em 0;
+  padding: 1em 1.25em;
+  border-radius: 6px;
+  background: var(--color-bg-secondary);
+  counter-reset: code-line;
+}
+
+.astro-code,
+.astro-code span {
+  color: light-dark(var(--shiki-light), var(--shiki-dark));
+}
+
+.astro-code code {
+  display: block;
+  font-family: inherit;
+}
+
+/* Line numbers */
+.astro-code .line {
+  counter-increment: code-line;
+  position: relative;
+  padding-left: 5ch;
+}
+
+.astro-code .line::before {
+  content: counter(code-line);
+  position: absolute;
+  left: 0;
+  width: 2ch;
+  text-align: right;
+  color: var(--color-text-muted);
+  opacity: 0.35;
+}
+
+/* Display math scrolls sideways instead of overflowing the page */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* ============================================
@@ -396,35 +313,13 @@ th {
     --page-padding: 1.25rem;
   }
 
-  /* Code blocks scroll horizontally */
-  .astro-code {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    margin-left: calc(var(--page-padding) * -1) !important;
-    margin-right: calc(var(--page-padding) * -1) !important;
-    border-radius: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
-
-  /* Tables scroll horizontally */
-  table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table > * {
-    display: block;
-  }
-
-  /* Tighten spacing */
   h1, h2, h3 {
     margin-top: 1.5em;
   }
 
-  /* Blockquote less indent */
-  blockquote {
-    padding-left: 0.75em;
+  /* Full-bleed code blocks */
+  .astro-code {
+    margin-inline: calc(var(--page-padding) * -1);
+    border-radius: 0;
   }
 }

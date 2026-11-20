@@ -1,28 +1,18 @@
 ---
 interface Props {
   tags: string[];
-  /** If set, tags render as links to /blog/tag/{tag} */
+  /** Render tags as links to /blog/tag/{tag}/ */
   link?: boolean;
-  /** Size variant: "sm" for compact, "md" for default */
-  size?: 'sm' | 'md';
 }
 
-const { tags, link = false, size = 'md' } = Astro.props;
+const { tags, link = false } = Astro.props;
 ---
 
-{link ? (
-  <div class="tags tags--link">
-    {tags.map((tag) => (
-      <a href={`/blog/tag/${tag}/`} class={`tag tag--${size}`}>{tag}</a>
-    ))}
-  </div>
-) : (
-  <div class="tags">
-    {tags.map((tag) => (
-      <span class={`tag tag--${size}`}>{tag}</span>
-    ))}
-  </div>
-)}
+<div class="tags">
+  {tags.map((tag) =>
+    link ? <a href={`/blog/tag/${tag}/`} class="tag">{tag}</a> : <span class="tag">{tag}</span>,
+  )}
+</div>
 
 <style>
   .tags {
@@ -33,27 +23,18 @@ const { tags, link = false, size = 'md' } = Astro.props;
 
   .tag {
     font-family: var(--font-sans);
+    font-size: 0.75rem;
     font-weight: 500;
+    padding: 0.1em 0.5em;
     border-radius: 999px;
     background: var(--color-tag-bg);
-    color: var(--color-tag-text);
-    text-decoration: none;
-    transition: background var(--transition-fast);
+    color: var(--color-accent);
     white-space: nowrap;
   }
 
-  .tag--sm {
-    font-size: 0.75rem;
-    padding: 0.1em 0.45em;
-  }
-
-  .tag--md {
-    font-size: 0.7rem;
-    padding: 0.15em 0.5em;
-  }
-
-  .tag--link:hover {
+  a.tag:hover {
     background: var(--color-accent);
-    color: #ffffff;
+    color: var(--color-bg);
+    text-decoration: none;
   }
 </style>

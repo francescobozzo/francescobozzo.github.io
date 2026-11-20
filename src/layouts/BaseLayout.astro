@@ -1,9 +1,9 @@
 ---
 import '../styles/global.css';
+import katexCss from 'katex/dist/katex.min.css?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
-import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -11,6 +11,8 @@ interface Props {
   /** Absolute URL or root-relative path used for og:image / twitter:image */
   ogImage?: string;
   ogType?: 'website' | 'article';
+  /** Load the KaTeX stylesheet (only pages that actually render math) */
+  math?: boolean;
 }
 
 const {
@@ -18,123 +20,48 @@ const {
   description = 'Personal website of Francesco Bozzo',
   ogImage,
   ogType = 'website',
+  math = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : null;
+const ogImageUrl = ogImage && new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="auto">
   <head>
-    <!-- Set theme before CSS loads - prevents flash -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Apply the saved theme before first paint -->
     <script is:inline>
-      (function(){
-        var stored = localStorage.getItem('theme');
-        var t;
-        // Explicit light/dark win; otherwise auto follows the OS preference
-        if (stored === 'light' || stored === 'dark') t = stored;
-        else t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', t);
-        var m = document.querySelector('meta[name="theme-color"]');
-        if (m) m.setAttribute('content', t === 'dark' ? '#0d1117' : '#ffffff');
-      })();
+      try { document.documentElement.dataset.theme = localStorage.theme || 'auto'; } catch {}
     </script>
 
-    <meta charset="UTF-8" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Francesco Bozzo" />
-
-    <title>{title}</title>
-
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Francesco Bozzo - Blog RSS" href="/rss.xml" />
 
-    <!-- Social / Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="Francesco Bozzo" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {ogImageUrl && (
-      <>
-        <meta property="og:image" content={ogImageUrl} />
-        <meta name="twitter:image" content={ogImageUrl} />
-      </>
-    )}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- RSS auto-discovery -->
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title="Francesco Bozzo - Blog RSS"
-      href="/rss.xml"
-    />
-
-    <!-- Client-side navigation (instant page swaps, no animation to prevent flash) -->
-    <ClientRouter transition="none" />
-
+    {math && <link rel="stylesheet" href={katexCss} />}
     <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-        <script is:inline>
-      (function(){
-        // is:inline re-runs on every ClientRouter swap - guard so window
-        // listeners (scroll/beforeunload/astro:*) don't accumulate.
-        if(window.__scrollSave)return;
-        window.__scrollSave=true;
-        // Disable browser's built-in scroll restoration
-        history.scrollRestoration='manual';
-
-        var p=location.pathname;
-        function k(){return '__s:'+p}
-
-        // Debounced scroll saver - captures final position even during momentum
-        var scrollTimer;
-        function saveScroll(){
-          var y=window.scrollY;
-          sessionStorage.setItem(k(), y);
-        }
-        window.addEventListener('scroll',function(){
-          clearTimeout(scrollTimer);
-          scrollTimer=setTimeout(saveScroll,100);
-        },{passive:true});
-
-        // Save on navigation start (catches position before momentum settles)
-        document.addEventListener('astro:before-preparation',function(){
-          saveScroll();
-        });
-
-        // Save on unload
-        window.addEventListener('beforeunload',function(){saveScroll()});
-        // Restore scroll after swap
-        document.addEventListener('astro:after-swap',function(){
-          p=location.pathname;
-          var y=sessionStorage.getItem(k());
-          if(y!=null) window.scrollTo({top:+y,behavior:'instant'});
-        });
-
-      })();
-    </script>
-    <div class="page-wrapper">
-      <Header currentPath={Astro.url.pathname} />
-      <main id="main-content" class="content">
-        <slot />
-      </main>
-      <Footer />
-      <BackToTop />
-    </div>
-    <!-- Scroll restoration at end of body - DOM parsed, browser hasn't painted yet -->
-    <script is:inline>
-      var _y=sessionStorage.getItem('__s:'+location.pathname);
-      if(_y!=null)window.scrollTo({top:+_y,behavior:'instant'});
-    </script>
+    <Header />
+    <main id="main-content" class="wrap">
+      <slot />
+    </main>
+    <Footer />
+    <BackToTop />
   </body>
 </html>

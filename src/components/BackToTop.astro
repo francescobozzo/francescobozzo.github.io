@@ -1,22 +1,28 @@
 ---
-// Back-to-top button: shows after scrolling down, smooth-scrolls to top
+// Floating button that appears once the page is scrolled down.
 ---
 
-<button id="back-to-top" aria-label="Back to top" title="Back to top">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
+<button id="back-to-top" type="button" aria-label="Back to top" title="Back to top" hidden>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <polyline points="18 15 12 9 6 15" />
   </svg>
 </button>
+
+<script is:inline>
+  {
+    const button = document.getElementById('back-to-top');
+    const update = () => (button.hidden = scrollY < 300);
+
+    // Smooth only here: a global `scroll-behavior: smooth` would also
+    // animate the browser's scroll restoration on reload.
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    button.addEventListener('click', () =>
+      scrollTo({ top: 0, behavior: reduceMotion.matches ? 'instant' : 'smooth' }),
+    );
+    addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>
 
 <style>
   #back-to-top {
@@ -24,9 +30,8 @@
     bottom: 2rem;
     right: 2rem;
     z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     width: 2.75rem;
     height: 2.75rem;
     border: 1px solid var(--color-border);
@@ -34,67 +39,10 @@
     background: var(--color-bg);
     color: var(--color-text-secondary);
     cursor: pointer;
-    opacity: 0;
-    transition:
-      opacity var(--transition-fast),
-      transform var(--transition-fast),
-      color var(--transition-fast),
-      border-color var(--transition-fast),
-      background var(--transition-fast);
   }
 
   #back-to-top:hover {
     color: var(--color-accent);
     border-color: var(--color-accent);
-    transform: translateY(-2px);
-  }
-
-  #back-to-top.show {
-    display: inline-flex;
-    opacity: 1;
-    transform: translateY(0);
   }
 </style>
-
-<script>
-  // Global guard: button lives in BaseLayout (persists across swaps), so a
-  // single init runs once. Old code re-added a throttled scroll listener on
-  // every astro:after-swap, accumulating duplicate handlers.
-  (function () {
-    window.__btt = window.__btt || {};
-    if (window.__btt.done) return;
-    window.__btt.done = true;
-
-    // Throttle scroll handler to ~60fps
-    function throttle(fn: () => void, wait: number) {
-      let last = 0;
-      return () => {
-        const now = Date.now();
-        if (now - last >= wait) {
-          last = now;
-          fn();
-        }
-      };
-    }
-
-    function toggleButton() {
-      const btn = document.getElementById('back-to-top');
-      if (!btn) return;
-      // Show after scrolling 300px down
-      btn.classList.toggle('show', window.scrollY > 300);
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Click delegation - single handler, survives swaps
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('#back-to-top')) scrollToTop();
-    });
-
-    window.addEventListener('scroll', throttle(toggleButton, 100), { passive: true });
-    // Check on load (handles page load at scroll position)
-    toggleButton();
-  })();
-</script>

@@ -7,9 +7,9 @@ Personal website built with [Astro](https://astro.build).
 - **Blog** with markdown posts, RSS feed, tags, and search
 - **LaTeX math** via KaTeX (`$inline$` and `$$block$$`)
 - **Dark mode** (system preference + manual toggle, persisted)
-- **Fast navigation** via Astro View Transitions (SPA-like, no full reloads)
-- **Lightweight** - zero JS by default, Tufte-inspired typography
-- **Responsive** - mobile-first with hamburger nav
+- **Fast** - each page is one HTML response with inlined CSS; links are prefetched as they scroll into view
+- **Lightweight** - a few lines of inline JS (theme toggle, search filter, back-to-top), Tufte-inspired typography
+- **Responsive** - same header on every screen size
 - **GitHub Pages** deployment via GitHub Actions
 
 ## Local Development
@@ -54,10 +54,10 @@ npm run dev
 │   ├── components/        # Reusable UI components
 │   ├── content.config.ts  # Content collection schemas
 │   ├── layouts/           # Page layouts
+│   ├── lib/               # Post helpers (sorting, dates, reading time)
 │   ├── pages/             # Routes (file-based routing)
 │   │   ├── blog/          # Blog routes
-│   │   ├── rss.xml.js     # RSS feed endpoint
-│   │   └── search.json.ts # Search index endpoint
+│   │   └── rss.xml.js     # RSS feed endpoint
 │   ├── projects/          # Project entries (*.md)
 │   └── styles/            # Global CSS
 ├── public/                # Static assets (favicon, etc.)
@@ -124,7 +124,7 @@ Site lives at: https://francescobozzo.github.io
 | Styling | Custom CSS (Tufte-inspired) |
 | Syntax highlighting | Shiki (dual light/dark) |
 | Math | KaTeX (remark-math + rehype-katex) |
-| Navigation | Astro View Transitions |
+| Navigation | Plain page loads + Astro prefetch |
 | RSS | @astrojs/rss |
 | Dependencies | npm + Nix flake |
 | Hosting | GitHub Pages |

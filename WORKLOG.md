@@ -10,6 +10,10 @@
 - [x] Fix ProjectCard nested interactive elements (`<button>` inside `<a>`) - card is now a div, stretched title link covers whole card, external links are real anchors
 - [x] Scope `a:visited` to content links (was overriding `.nav-link`/`.site-title` via specificity, turning visited nav purple)
 - [x] Consistent trailing slashes on all internal links + `trailingSlash: 'always'` (avoids 301s on GitHub Pages, matches sitemap/RSS/canonical)
+- [x] Simplify: drop ClientRouter (plain pages + viewport prefetch, native scroll restoration), remove hamburger nav, `light-dark()` theming, inline CSS, CSS-only reading progress, search filters the rendered post list (no `search.json`)
+- [x] Fix KaTeX renderer/stylesheet version mismatch (sub/superscripts rendered full-size); self-host KaTeX CSS
+- [x] Fix swapped Older/Newer post links, tag hover style, missing `ExternalLinkIcon` import on project pages, broken mobile table layout, anchors hidden under the header
+- [x] `twitter:card`: `summary` when there is no og:image
 
 ## Remaining
 
@@ -19,7 +23,6 @@
 - [ ] OG images per post
 - [ ] Newsletter signup
 - [ ] Related posts by tags
-- [ ] Full-text search (search.json indexes title/description/tags only, not body)
-- [ ] Self-host KaTeX CSS (currently CDN-pinned, no SRI/preconnect)
+- [ ] Full-text search (search filters title/description/tags only, not body)
+- [ ] Render Mermaid diagrams at build time (the ~660KB client bundle is the heaviest thing on the site)
 - [ ] RSS: include post content (feed readers see only description)
-- [ ] `twitter:card`: use `summary` when no og:image (currently always `summary_large_image`)

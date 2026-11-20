@@ -1,11 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { formatDateCompact } from '../lib/formatDate';
+import { formatDate, getPosts } from '../lib/posts';
 
-const posts = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const posts = (await getPosts()).slice(0, 3);
 ---
 
 <BaseLayout title="Francesco Bozzo" description="Personal website of Francesco Bozzo">
@@ -31,7 +28,7 @@ const posts = (await getCollection('blog'))
           <li class="post-item">
             <a href={`/blog/${post.id}/`}>
               <time datetime={post.data.pubDate.toISOString()}>
-                {formatDateCompact(post.data.pubDate)}
+                {formatDate(post.data.pubDate, 'short')}
               </time>
               <span class="post-title">{post.data.title}</span>
             </a>
@@ -48,11 +45,6 @@ const posts = (await getCollection('blog'))
     margin-bottom: 3rem;
   }
 
-  .hero h1 {
-    margin-top: 0;
-    margin-bottom: 0.5em;
-  }
-
   .tagline {
     font-size: 1.1em;
     color: var(--color-text-secondary);
@@ -67,15 +59,6 @@ const posts = (await getCollection('blog'))
     flex-wrap: wrap;
     font-family: var(--font-sans);
     font-size: 0.95rem;
-  }
-
-  .hero-links a {
-    color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  .hero-links a:hover {
-    text-decoration: underline;
   }
 
   .sep {
@@ -105,8 +88,6 @@ const posts = (await getCollection('blog'))
     align-items: baseline;
     gap: 0.75em;
     color: var(--color-text);
-    text-decoration: none;
-    transition: color var(--transition-fast);
   }
 
   .post-item a:hover {
@@ -131,11 +112,5 @@ const posts = (await getCollection('blog'))
     margin-top: 0.75em;
     font-family: var(--font-sans);
     font-size: 0.9rem;
-    color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  .view-all:hover {
-    text-decoration: underline;
   }
 </style>
